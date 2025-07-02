@@ -43,6 +43,7 @@ function App() {
   const [todos, setTodos] = useState<{text: string, done: boolean}[]>([])
   const [todoInput, setTodoInput] = useState('')
   const [font, setFont] = useState(FONT_OPTIONS[0].value)
+  const [infoOpen, setInfoOpen] = useState(false)
 
   // Load from localStorage
   useEffect(() => {
@@ -128,15 +129,35 @@ function App() {
         >
           {dark ? '🌙' : '☀️'}
         </button>
+        <button
+          onClick={() => setInfoOpen(true)}
+          style={{border:'none',background:'none',color:'inherit',fontSize:20,cursor:'pointer'}}
+          aria-label="Show info"
+        >
+          ℹ️
+        </button>
       </div>
+      {infoOpen && (
+        <div style={{position:'fixed',top:0,right:0,width:'320px',maxWidth:'90vw',height:'100vh',background:'var(--bg)',color:'var(--fg)',boxShadow:'-2px 0 16px 0 rgba(0,0,0,0.10)',zIndex:1000,display:'flex',flexDirection:'column',padding:'2rem 1.5rem 1.5rem 1.5rem',transition:'transform 0.2s',fontSize:'1.08em'}}>
+          <button onClick={()=>setInfoOpen(false)} style={{position:'absolute',top:12,right:16,border:'none',background:'none',fontSize:22,cursor:'pointer',color:'inherit'}} aria-label="Close info">✕</button>
+          <h2 style={{marginTop:0,marginBottom:'1.2em',fontSize:'1.3em'}}>Info</h2>
+          <ul style={{paddingLeft:18,marginBottom:'auto'}}>
+            <li>Press <b>Enter</b> to add a to-do.</li>
+          </ul>
+          <div style={{marginTop:'auto',fontSize:'0.98em',color:'#888',textAlign:'center'}}>
+            Questions? DM <b>@imajinl</b> on Telegram.
+          </div>
+        </div>
+      )}
       <div className="notetaker-container" style={{fontFamily: effectiveFont}}>
         <h1 className="noteva-heading">noteva</h1>
-        <form onSubmit={addTodo} style={{width: '100%', maxWidth: 420, margin: '0 auto'}}>
+        <form onSubmit={addTodo} style={{width: '100%', maxWidth: 700, margin: '0 auto 0.2rem auto'}}>
           <input
             className="todo-input"
             value={todoInput}
             onChange={e => setTodoInput(e.target.value)}
             placeholder="Add a to-do..."
+            style={{width: '100%'}}
           />
         </form>
         <ul className="todo-list">
