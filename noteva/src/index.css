@@ -106,44 +106,40 @@ button:focus-visible {
   padding-top: 1.5vh;
 }
 
-.noteva-block {
-  width: 100%;
-  max-width: 900px;
-  min-height: 38vh;
-  margin: 0 auto 2.2rem auto;
-  background: var(--input-bg);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.03);
-  padding: 1.5rem 1.2rem;
-  display: flex;
-  flex-direction: column;
-}
-
 .notetaker-textarea {
   width: 100%;
-  min-height: 32vh;
-  max-width: 100%;
+  min-height: 40vh;
+  max-width: 700px;
   resize: vertical;
-  font-size: 1.15rem;
+  padding: 1rem;
+  font-size: 1.05rem;
   border-radius: 8px;
   border: 1px solid #ccc;
   background: var(--input-bg);
   color: var(--fg);
   font-family: inherit;
   outline: none;
-  box-shadow: none;
-  margin-bottom: 0;
-  padding: 1rem;
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.02);
+  margin-bottom: 0.7rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
 
 .todo-list {
   width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 0;
+  max-width: 700px;
+  margin: 0 auto 0.7rem auto;
+  padding: 0.7rem 1rem;
   list-style: none;
-  background: none;
-  box-shadow: none;
+  background: var(--input-bg);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.02);
+  min-height: 40vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .todo-item {
@@ -153,13 +149,14 @@ button:focus-visible {
   font-size: 1rem;
   border-bottom: 1px solid #eee;
 }
-
+.todo-item:last-child {
+  border-bottom: none;
+}
 .todo-checkbox {
   margin-right: 0.7rem;
   width: 1em;
   height: 1em;
 }
-
 .todo-input {
   width: 100%;
   font-size: 1rem;
@@ -172,7 +169,6 @@ button:focus-visible {
   font-family: inherit;
   outline: none;
 }
-
 .todo-delete-btn {
   margin-left: auto;
   background: none;
