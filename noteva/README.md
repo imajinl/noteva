@@ -1,69 +1,32 @@
-# React + TypeScript + Vite
+# noteva
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Minimal notetaker + to-do app
 
-Currently, two official plugins are available:
+- Clean, distraction-free UI
+- Light/dark mode toggle (top right)
+- Choose from 30+ popular fonts
+- LocalStorage for notes, todos, and font
+- Export notes/todos as JSON
+- Info/help drawer (ℹ️ top right)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Usage
+- **Add a to-do:** Type and press Enter
+- **Delete a to-do:** Click ✕
+- **Clear all to-dos:** Click "Clear all"
+- **Change font:** Use dropdown (top right)
+- **Export:** Click "Export" (top right)
+- **Info:** Click ℹ️ (top right)
 
-## Expanding the ESLint configuration
+## Deploy
+### Vercel
+- Set **Root Directory** to `noteva`
+- **Build Command:** `npm run build`
+- **Output Directory:** `dist`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Netlify
+- **Build Command:** `npm run build`
+- **Publish directory:** `dist`
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Credits
+- Built by @imajinl
+- Questions? DM [@imajinl on Telegram](https://t.me/imajinl)
