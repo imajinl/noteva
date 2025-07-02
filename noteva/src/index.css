@@ -89,68 +89,81 @@ button:focus-visible {
 
 .noteva-heading {
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 4.2rem;
+  font-size: 2.2rem;
   font-weight: 700;
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.2rem;
   letter-spacing: 0.01em;
 }
 
 .notetaker-container {
-  min-height: 95vh;
-  min-width: 95vw;
+  min-height: 100vh;
+  min-width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 3vh;
+  padding-top: 1.5vh;
 }
 
 .notetaker-textarea {
   width: 100%;
-  min-height: 80vh;
-  max-width: 1200px;
+  min-height: 40vh;
+  max-width: 700px;
   resize: vertical;
-  padding: 2rem;
-  font-size: 1.35rem;
-  border-radius: 14px;
-  border: 1.5px solid #ccc;
+  padding: 1rem;
+  font-size: 1.05rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
   background: var(--input-bg);
   color: var(--fg);
   font-family: inherit;
   outline: none;
-  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.03);
-  margin-bottom: 2.5rem;
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.02);
+  margin-bottom: 1.2rem;
 }
 
 .todo-list {
   width: 100%;
-  max-width: 600px;
-  margin: 0 auto 2rem auto;
+  max-width: 420px;
+  margin: 0 auto 1rem auto;
   padding: 0;
   list-style: none;
 }
 .todo-item {
   display: flex;
   align-items: center;
-  padding: 0.5rem 0;
-  font-size: 1.15rem;
+  padding: 0.25rem 0;
+  font-size: 1rem;
   border-bottom: 1px solid #eee;
 }
 .todo-checkbox {
-  margin-right: 1rem;
-  width: 1.2em;
-  height: 1.2em;
+  margin-right: 0.7rem;
+  width: 1em;
+  height: 1em;
 }
 .todo-input {
   width: 100%;
-  font-size: 1.1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  font-size: 1rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.7rem;
   background: var(--input-bg);
   color: var(--fg);
   font-family: inherit;
   outline: none;
+}
+.todo-delete-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.1em;
+  cursor: pointer;
+  padding: 0 0.5em;
+  transition: color 0.15s;
+}
+.todo-delete-btn:hover {
+  color: #d33;
 }
