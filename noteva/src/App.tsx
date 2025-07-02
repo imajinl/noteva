@@ -131,37 +131,41 @@ function App() {
       </div>
       <div className="notetaker-container" style={{fontFamily: effectiveFont}}>
         <h1 className="noteva-heading">noteva</h1>
-        <form onSubmit={addTodo} style={{width: '100%', maxWidth: 420, margin: '0 auto'}}>
-          <input
-            className="todo-input"
-            value={todoInput}
-            onChange={e => setTodoInput(e.target.value)}
-            placeholder="Add a to-do..."
+        <div className="noteva-block">
+          <form onSubmit={addTodo} style={{width: '100%'}}>
+            <input
+              className="todo-input"
+              value={todoInput}
+              onChange={e => setTodoInput(e.target.value)}
+              placeholder="Add a to-do..."
+            />
+          </form>
+          <ul className="todo-list">
+            {todos.map((todo, i) => (
+              <li className="todo-item" key={i}>
+                <input
+                  type="checkbox"
+                  className="todo-checkbox"
+                  checked={todo.done}
+                  onChange={() => toggleTodo(i)}
+                />
+                <span style={{textDecoration: todo.done ? 'line-through' : undefined, opacity: todo.done ? 0.5 : 1}}>{todo.text}</span>
+                <button className="todo-delete-btn" onClick={() => deleteTodo(i)} title="Delete to-do" aria-label="Delete to-do">✕</button>
+              </li>
+            ))}
+          </ul>
+          {todos.length > 0 && (
+            <button onClick={clearTodos} className="todo-delete-btn" style={{margin:'0 0 1.2rem auto',display:'block',fontSize:'1em'}} title="Delete all to-dos" aria-label="Delete all to-dos">Clear all</button>
+          )}
+        </div>
+        <div className="noteva-block">
+          <textarea
+            className="notetaker-textarea"
+            value={note}
+            onChange={e => setNote(e.target.value)}
+            placeholder="Type your note..."
           />
-        </form>
-        <ul className="todo-list">
-          {todos.map((todo, i) => (
-            <li className="todo-item" key={i}>
-              <input
-                type="checkbox"
-                className="todo-checkbox"
-                checked={todo.done}
-                onChange={() => toggleTodo(i)}
-              />
-              <span style={{textDecoration: todo.done ? 'line-through' : undefined, opacity: todo.done ? 0.5 : 1}}>{todo.text}</span>
-              <button className="todo-delete-btn" onClick={() => deleteTodo(i)} title="Delete to-do" aria-label="Delete to-do">✕</button>
-            </li>
-          ))}
-        </ul>
-        {todos.length > 0 && (
-          <button onClick={clearTodos} className="todo-delete-btn" style={{margin:'0 0 1.2rem auto',display:'block',fontSize:'1em'}} title="Delete all to-dos" aria-label="Delete all to-dos">Clear all</button>
-        )}
-        <textarea
-          className="notetaker-textarea"
-          value={note}
-          onChange={e => setNote(e.target.value)}
-          placeholder="Type your note..."
-        />
+        </div>
       </div>
     </>
   )
