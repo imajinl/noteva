@@ -22,19 +22,7 @@ function App() {
   })
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'var(--bg)',
-        color: 'var(--fg)',
-        fontFamily: 'Inter, system-ui, sans-serif',
-        transition: 'background 0.2s, color 0.2s',
-      }}
-    >
+    <div className="notetaker-container">
       <button
         onClick={toggleTheme}
         style={{
@@ -44,29 +32,18 @@ function App() {
           color: 'inherit',
           fontSize: 18,
           cursor: 'pointer',
+          alignSelf: 'flex-end',
         }}
         aria-label="Toggle light/dark mode"
       >
         {dark ? '🌙' : '☀️'}
       </button>
+      <h1 className="virgil">noteva</h1>
       <textarea
+        className="notetaker-textarea"
         value={note}
         onChange={e => setNote(e.target.value)}
         placeholder="Type your note..."
-        style={{
-          width: 340,
-          minHeight: 180,
-          resize: 'vertical',
-          padding: 16,
-          fontSize: 18,
-          borderRadius: 10,
-          border: '1px solid #ccc',
-          background: 'var(--input-bg)',
-          color: 'var(--fg)',
-          fontFamily: 'inherit',
-          outline: 'none',
-          boxShadow: '0 2px 8px 0 rgba(0,0,0,0.03)',
-        }}
       />
     </div>
   )

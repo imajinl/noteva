@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Virgil&display=swap');
 
 :root {
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -75,4 +76,39 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.virgil {
+  font-family: 'Virgil', cursive;
+  font-size: 2.8rem;
+  font-weight: 400;
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+.notetaker-container {
+  min-height: 90vh;
+  min-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 4vh;
+}
+
+.notetaker-textarea {
+  width: 100%;
+  min-height: 60vh;
+  max-width: 900px;
+  resize: vertical;
+  padding: 2rem;
+  font-size: 1.25rem;
+  border-radius: 12px;
+  border: 1.5px solid #ccc;
+  background: var(--input-bg);
+  color: var(--fg);
+  font-family: inherit;
+  outline: none;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.03);
 }
