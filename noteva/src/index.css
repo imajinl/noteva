@@ -87,28 +87,70 @@ button:focus-visible {
   text-align: center;
 }
 
+.noteva-heading {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 4.2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.01em;
+}
+
 .notetaker-container {
-  min-height: 90vh;
-  min-width: 90vw;
+  min-height: 95vh;
+  min-width: 95vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 4vh;
+  padding-top: 3vh;
 }
 
 .notetaker-textarea {
   width: 100%;
-  min-height: 60vh;
-  max-width: 900px;
+  min-height: 80vh;
+  max-width: 1200px;
   resize: vertical;
   padding: 2rem;
-  font-size: 1.25rem;
-  border-radius: 12px;
+  font-size: 1.35rem;
+  border-radius: 14px;
   border: 1.5px solid #ccc;
   background: var(--input-bg);
   color: var(--fg);
   font-family: inherit;
   outline: none;
   box-shadow: 0 2px 8px 0 rgba(0,0,0,0.03);
+  margin-bottom: 2.5rem;
+}
+
+.todo-list {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 2rem auto;
+  padding: 0;
+  list-style: none;
+}
+.todo-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 1.15rem;
+  border-bottom: 1px solid #eee;
+}
+.todo-checkbox {
+  margin-right: 1rem;
+  width: 1.2em;
+  height: 1.2em;
+}
+.todo-input {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 1.2rem;
+  background: var(--input-bg);
+  color: var(--fg);
+  font-family: inherit;
+  outline: none;
 }
