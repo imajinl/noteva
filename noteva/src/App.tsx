@@ -43,6 +43,14 @@ function App() {
   const [font, setFont] = useState(FONT_OPTIONS[0].value)
   const [infoOpen, setInfoOpen] = useState(false)
   const [barVisible, setBarVisible] = useState(true)
+  const [time, setTime] = useState(new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}))
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}))
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
 
   // Load from localStorage
   useEffect(() => {
@@ -110,6 +118,9 @@ function App() {
 
   return (
     <>
+      <div style={{position:'fixed', top:'0.8rem', left:'1rem', fontSize:'0.9rem', color:'var(--fg)', opacity:0.8, pointerEvents:'none', userSelect:'none'}}>
+        {time}
+      </div>
       <div className="notetaker-container" style={{fontFamily: effectiveFont}}>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginBottom: '1.2rem' }}>
       {barVisible ? (
