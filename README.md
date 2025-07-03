@@ -1,6 +1,6 @@
 # noteva 🦋
 
-minimal notetaker and to-do app — everything is saved in your browser's local storage. distraction-free, fast, and customizable.
+minimalistic notetaker and to-do app — everything is saved in your browser's local storage. distraction-free, fast, and customizable.
 
 - distraction-free notes and todos
 - light / dark mode toggle
