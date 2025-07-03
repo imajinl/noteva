@@ -1,4 +1,4 @@
-# noteva
+# noteva 🦋
 
 minimal notetaker and to-do app — everything is saved in your browser's local storage. distraction-free, fast, and customizable.
 
