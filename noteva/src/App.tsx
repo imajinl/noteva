@@ -112,138 +112,138 @@ function App() {
     <>
       <div className="notetaker-container" style={{fontFamily: effectiveFont}}>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginBottom: '1.2rem' }}>
-          {barVisible ? (
-            <div
-              style={{
+      {barVisible ? (
+        <div
+          style={{
                 position: 'static',
-                display: 'flex',
-                alignItems: 'center',
-                background: dark ? 'var(--bg)' : '#fff',
-                border: dark ? '1px solid #333' : '1px solid #ddd',
-                borderRadius: 8,
-                boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)',
-                padding: '0.3em 1.1em',
-                minHeight: 40,
-              }}
-            >
-              <select
-                value={font}
-                onChange={e => setFont(e.target.value)}
-                style={{
-                  fontSize: '1em',
+            display: 'flex',
+            alignItems: 'center',
+            background: dark ? 'var(--bg)' : '#fff',
+            border: dark ? '1px solid #333' : '1px solid #ddd',
+            borderRadius: 8,
+            boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)',
+            padding: '0.3em 1.1em',
+            minHeight: 40,
+          }}
+        >
+          <select
+            value={font}
+            onChange={e => setFont(e.target.value)}
+            style={{
+              fontSize: '1em',
+              padding: '0.2em 0.5em',
+              borderRadius: 6,
+              border: dark ? '1px solid #333' : '1px solid #ccc',
+              background: dark ? 'var(--bg)' : '#fff',
+              color: 'inherit',
+              marginRight: 8,
+            }}
+            aria-label="Choose font"
+          >
+            {FONT_OPTIONS.map(opt => (
+              <option value={opt.value} key={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={exportData}
+            style={{
+              fontSize: '1em',
                   padding: '0.2em 0.5em',
-                  borderRadius: 6,
-                  border: dark ? '1px solid #333' : '1px solid #ccc',
+              borderRadius: 6,
+              border: dark ? '1px solid #333' : '1px solid #ccc',
                   background: dark ? 'var(--bg)' : '#fff',
-                  color: 'inherit',
-                  marginRight: 8,
-                }}
-                aria-label="Choose font"
-              >
-                {FONT_OPTIONS.map(opt => (
-                  <option value={opt.value} key={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-              <button
-                onClick={exportData}
-                style={{
-                  fontSize: '1em',
-                  padding: '0.2em 0.5em',
-                  borderRadius: 6,
-                  border: dark ? '1px solid #333' : '1px solid #ccc',
-                  background: dark ? 'var(--bg)' : '#fff',
-                  color: 'inherit',
-                  cursor: 'pointer',
-                  marginRight: 8,
-                }}
-              >
-                Export
-              </button>
-              <button
-                onClick={toggleTheme}
-                style={{
-                  border: 'none',
-                  background: 'none',
-                  color: 'inherit',
-                  fontSize: 20,
-                  cursor: 'pointer',
-                  marginRight: 0,
-                }}
-                aria-label="Toggle light/dark mode"
-              >
-                {dark ? '🌙' : '☀️'}
-              </button>
-              <button
-                onClick={() => setInfoOpen(true)}
-                style={{
-                  border: 'none',
-                  background: 'none',
-                  color: 'inherit',
-                  fontSize: 20,
-                  cursor: 'pointer',
-                  marginLeft: 0,
-                }}
-                aria-label="Show info"
-              >
-                ℹ️
-              </button>
-              <button
-                onClick={() => setBarVisible(false)}
-                style={{
-                  border: 'none',
-                  background: 'none',
-                  color: 'inherit',
-                  fontSize: 18,
-                  cursor: 'pointer',
-                  marginLeft: 8,
-                }}
-                aria-label="Hide bar"
-                title="Hide bar"
-              >
-                ✕
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => setBarVisible(true)}
-              style={{
-                position: 'static',
-                border: 'none',
-                background: dark ? 'var(--bg)' : '#fff',
-                color: 'inherit',
-                fontSize: 22,
-                borderRadius: 8,
-                boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)',
-                padding: '0.2em 0.7em',
-                cursor: 'pointer',
-              }}
-              aria-label="Show bar"
-              title="Show bar"
-            >
-              ≡
-            </button>
-          )}
+              color: 'inherit',
+              cursor: 'pointer',
+              marginRight: 8,
+            }}
+          >
+            Export
+          </button>
+          <button
+            onClick={toggleTheme}
+            style={{
+              border: 'none',
+              background: 'none',
+              color: 'inherit',
+              fontSize: 20,
+              cursor: 'pointer',
+              marginRight: 0,
+            }}
+            aria-label="Toggle light/dark mode"
+          >
+            {dark ? '🌙' : '☀️'}
+          </button>
+          <button
+            onClick={() => setInfoOpen(true)}
+            style={{
+              border: 'none',
+              background: 'none',
+              color: 'inherit',
+              fontSize: 20,
+              cursor: 'pointer',
+              marginLeft: 0,
+            }}
+            aria-label="Show info"
+          >
+            ℹ️
+          </button>
+          <button
+            onClick={() => setBarVisible(false)}
+            style={{
+              border: 'none',
+              background: 'none',
+              color: 'inherit',
+              fontSize: 18,
+              cursor: 'pointer',
+              marginLeft: 8,
+            }}
+            aria-label="Hide bar"
+            title="Hide bar"
+          >
+            ✕
+          </button>
         </div>
-        {infoOpen && (
-          <div style={{position:'fixed',top:0,right:0,width:'320px',maxWidth:'90vw',height:'100vh',background:'var(--bg)',color:'var(--fg)',boxShadow:'-2px 0 16px 0 rgba(0,0,0,0.10)',zIndex:1000,display:'flex',flexDirection:'column',padding:'2rem 1.5rem 1.5rem 1.5rem',transition:'transform 0.2s',fontSize:'1.08em'}}>
-            <button onClick={()=>setInfoOpen(false)} style={{position:'absolute',top:12,right:16,border:'none',background:'none',fontSize:22,cursor:'pointer',color:'inherit'}} aria-label="Close info">✕</button>
-            <h2 style={{marginTop:0,marginBottom:'1.2em',fontSize:'1.3em'}}>Info</h2>
-            <ul style={{paddingLeft:18,marginBottom:'auto',textAlign:'left'}}>
-              <li>Press <b>Enter</b> to add a to-do.</li>
-              <li>Your notes and to-dos are saved in your browser (local storage).</li>
-              <li>You can export your notes and to-dos as JSON.</li>
-              <li>Change fonts and theme from the top right bar.</li>
-            </ul>
-            <div style={{marginBottom: '0.5em', fontSize: '1em', color: '#888', textAlign: 'center'}}>
-              DM <b>@imajinl</b> for questions or feedback on Telegram.
-            </div>
-            <div style={{marginTop:'auto',fontSize:'0.98em',color:'#888',textAlign:'center'}}>
-              Questions? DM <b>@imajinl</b> on Telegram.
-            </div>
+      ) : (
+        <button
+          onClick={() => setBarVisible(true)}
+          style={{
+                position: 'static',
+            border: 'none',
+            background: dark ? 'var(--bg)' : '#fff',
+            color: 'inherit',
+            fontSize: 22,
+            borderRadius: 8,
+            boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)',
+            padding: '0.2em 0.7em',
+            cursor: 'pointer',
+          }}
+          aria-label="Show bar"
+          title="Show bar"
+        >
+          ≡
+        </button>
+      )}
+        </div>
+      {infoOpen && (
+        <div style={{position:'fixed',top:0,right:0,width:'320px',maxWidth:'90vw',height:'100vh',background:'var(--bg)',color:'var(--fg)',boxShadow:'-2px 0 16px 0 rgba(0,0,0,0.10)',zIndex:1000,display:'flex',flexDirection:'column',padding:'2rem 1.5rem 1.5rem 1.5rem',transition:'transform 0.2s',fontSize:'1.08em'}}>
+          <button onClick={()=>setInfoOpen(false)} style={{position:'absolute',top:12,right:16,border:'none',background:'none',fontSize:22,cursor:'pointer',color:'inherit'}} aria-label="Close info">✕</button>
+          <h2 style={{marginTop:0,marginBottom:'1.2em',fontSize:'1.3em'}}>Info</h2>
+          <ul style={{paddingLeft:18,marginBottom:'auto',textAlign:'left'}}>
+            <li>Press <b>Enter</b> to add a to-do.</li>
+            <li>Your notes and to-dos are saved in your browser (local storage).</li>
+            <li>You can export your notes and to-dos as JSON.</li>
+            <li>Change fonts and theme from the top right bar.</li>
+          </ul>
+          <div style={{marginBottom: '0.5em', fontSize: '1em', color: '#888', textAlign: 'center'}}>
+            DM <b>@imajinl</b> for questions or feedback on Telegram.
           </div>
-        )}
+          <div style={{marginTop:'auto',fontSize:'0.98em',color:'#888',textAlign:'center'}}>
+            Questions? DM <b>@imajinl</b> on Telegram.
+          </div>
+        </div>
+      )}
         <h1 className="noteva-heading">noteva <span role="img" aria-label="butterfly">🦋</span></h1>
         <form onSubmit={addTodo} style={{width: '100%', maxWidth: 700, margin: '0 auto 0.2rem auto'}}>
           <input
