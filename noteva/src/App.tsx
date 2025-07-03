@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import './App.css'
 
 const FONT_OPTIONS = [
   { label: 'Inter', value: 'Inter, system-ui, sans-serif' },
