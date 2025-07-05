@@ -480,7 +480,7 @@ function App() {
             <li>Change fonts and theme from the top right bar.</li>
             <li>Toggle visibility of 'Entry', 'List', and 'Notes' boxes by clicking the buttons in the toolbar (strikethrough = hidden).</li>
             <li>Use 'Clear' button to clear all to-dos and notes.</li>
-            <li>Select text in notes to show formatting popup with bold, italic, underline, headings, and lists.</li>
+            <li>Select text in notes to show formatting popup with bold, underline, headings, and lists.</li>
             <li>Type '1. ' for numbered lists or '- ' for bullet lists.</li>
           </ul>
           <div style={{marginBottom: '0.5em', fontSize: '1em', color: '#888', textAlign: 'center'}}>
@@ -585,23 +585,6 @@ function App() {
                   title="Bold"
                 >
                   B
-                </button>
-                <button
-                  type="button"
-                  onClick={() => formatText('italic')}
-                  style={{
-                    padding: '4px 8px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    background: dark ? '#2a2a2a' : '#f8f9fa',
-                    color: 'inherit',
-                    cursor: 'pointer',
-                    fontSize: '14px',
-                    fontStyle: 'italic',
-                  }}
-                  title="Italic"
-                >
-                  I
                 </button>
                 <button
                   type="button"

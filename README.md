@@ -4,7 +4,7 @@ minimalistic notetaker and to-do app with rich text formatting — everything is
 
 ## features
 - **distraction-free notes and to-dos** with clean, modern interface
-- **rich text formatting** — bold, italic, underline, strikethrough, headings, and lists
+- **rich text formatting** — bold, underline, strikethrough, headings, and lists
 - **smart auto-detection** — type '1. ' for numbered lists or '- ' for bullet lists
 - **popup formatting toolbar** — select text to show formatting options
 - **customizable layout** — hide / show Entry, List, or Notes boxes individually
@@ -25,7 +25,7 @@ minimalistic notetaker and to-do app with rich text formatting — everything is
 - **change font:** use the dropdown in the toolbar
 - **switch theme:** click the '🌙' / '☀️' button
 - **export data:** click 'Export' to download your data as JSON
-- **format text:** select text in notes to show formatting popup with bold, italic, underline, headings, and lists
+- **format text:** select text in notes to show formatting popup with bold, underline, headings, and lists
 - **create lists:** type '1. ' for numbered lists or '- ' for bullet lists
 - **get help:** click the 'ℹ️' button for detailed instructions
 
