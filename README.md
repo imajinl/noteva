@@ -10,7 +10,7 @@ minimalistic notetaker and to-do app with rich text formatting — everything is
 - **customizable layout** — hide / show Entry, List, or Notes boxes individually
 - **light / dark mode toggle** with theme-aware styling
 - **30+ font options** for personalized typography
-- **bitcoin price display** via Coingecko API (updates every minute)
+- **bitcoin price display** via CoinGecko API (updates every minute)
 - **enhanced to-do list** with custom checkboxes and smooth animations
 - **local storage persistence** — all data saved automatically in your browser
 - **json export** for backup and portability
