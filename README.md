@@ -18,7 +18,7 @@ minimalistic notetaker and to-do app — everything is saved in your browser's l
 - **complete / uncomplete:** click the custom checkbox next to any to-do
 - **delete individual todo:** click the '✕' button
 - **clear everything:** click 'Clear' to remove all todos and notes
-- **hide/show sections:** click 'Entry', 'List', or 'Notes' in the toolbar (strikethrough = hidden)
+- **hide / show sections:** click 'Entry', 'List', or 'Notes' in the toolbar (strikethrough = hidden)
 - **change font:** use the dropdown in the toolbar
 - **switch theme:** click the '🌙' / '☀️' button
 - **export data:** click 'Export' to download your data as JSON
