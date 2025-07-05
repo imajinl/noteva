@@ -214,6 +214,8 @@ function App() {
                     background: dark ? 'var(--bg)' : '#fff',
                     color: 'inherit',
                     marginRight: 8,
+                    height: '32px',
+                    boxSizing: 'border-box',
                   }}
                   aria-label="Choose font"
                 >
@@ -223,46 +225,6 @@ function App() {
                     </option>
                   ))}
                 </select>
-                <button
-                  onClick={exportData}
-                  style={{
-                    fontSize: '1em',
-                    padding: '0.2em 0.5em',
-                    borderRadius: 6,
-                    border: dark ? '1px solid #333' : '1px solid #ccc',
-                    background: dark ? 'var(--bg)' : '#fff',
-                    color: 'inherit',
-                    cursor: 'pointer',
-                    marginRight: 8,
-                    minWidth: '70px',
-                    height: '32px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  Export
-                </button>
-                <button
-                  onClick={clearAll}
-                  style={{
-                    fontSize: '1em',
-                    padding: '0.2em 0.5em',
-                    borderRadius: 6,
-                    border: dark ? '1px solid #333' : '1px solid #ccc',
-                    background: dark ? 'var(--bg)' : '#fff',
-                    color: 'inherit',
-                    cursor: 'pointer',
-                    marginRight: 8,
-                    minWidth: '70px',
-                    height: '32px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  Clear
-                </button>
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -292,6 +254,12 @@ function App() {
                   >
                     Entry
                   </button>
+                  <div style={{
+                    width: '1px',
+                    height: '16px',
+                    background: dark ? '#555' : '#ddd',
+                    margin: '0 2px',
+                  }}></div>
                   <button
                     onClick={() => setShowTodoList(!showTodoList)}
                     style={{
@@ -309,6 +277,12 @@ function App() {
                   >
                     List
                   </button>
+                  <div style={{
+                    width: '1px',
+                    height: '16px',
+                    background: dark ? '#555' : '#ddd',
+                    margin: '0 2px',
+                  }}></div>
                   <button
                     onClick={() => setShowNoteBox(!showNoteBox)}
                     style={{
@@ -327,6 +301,46 @@ function App() {
                     Notes
                   </button>
                 </div>
+                <button
+                  onClick={exportData}
+                  style={{
+                    fontSize: '0.85em',
+                    padding: '0.2em 0.5em',
+                    borderRadius: 6,
+                    border: dark ? '1px solid #333' : '1px solid #ccc',
+                    background: dark ? 'var(--bg)' : '#fff',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    marginRight: 8,
+                    minWidth: '70px',
+                    height: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  Export
+                </button>
+                <button
+                  onClick={clearAll}
+                  style={{
+                    fontSize: '0.85em',
+                    padding: '0.2em 0.5em',
+                    borderRadius: 6,
+                    border: dark ? '1px solid #333' : '1px solid #ccc',
+                    background: dark ? 'var(--bg)' : '#fff',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    marginRight: 8,
+                    minWidth: '70px',
+                    height: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  Clear
+                </button>
                 <button
                   onClick={toggleTheme}
                   style={{
