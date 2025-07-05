@@ -133,7 +133,10 @@ function App() {
   const deleteTodo = (idx: number) => {
     setTodos(t => t.filter((_, i) => i !== idx))
   }
-  const clearTodos = () => setTodos([])
+  const clearAll = () => {
+    setTodos([])
+    setNote('')
+  }
 
   const exportData = () => {
     const data = {
@@ -231,11 +234,48 @@ function App() {
                     color: 'inherit',
                     cursor: 'pointer',
                     marginRight: 8,
+                    minWidth: '70px',
+                    height: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   Export
                 </button>
-                <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginRight: 8}}>
+                <button
+                  onClick={clearAll}
+                  style={{
+                    fontSize: '1em',
+                    padding: '0.2em 0.5em',
+                    borderRadius: 6,
+                    border: dark ? '1px solid #333' : '1px solid #ccc',
+                    background: dark ? 'var(--bg)' : '#fff',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    marginRight: 8,
+                    minWidth: '70px',
+                    height: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  Clear
+                </button>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  marginRight: 8,
+                  padding: '0.2em 0.5em',
+                  borderRadius: 6,
+                  border: dark ? '1px solid #333' : '1px solid #ccc',
+                  background: dark ? 'var(--bg)' : '#fff',
+                  height: '32px',
+                  boxSizing: 'border-box',
+                }}>
                   <label style={{display: 'flex', alignItems: 'center', fontSize: '0.85em', gap: '3px', cursor: 'pointer'}}>
                     <input
                       type="checkbox"
@@ -306,6 +346,7 @@ function App() {
             <li>You can export your notes and to-dos as JSON.</li>
             <li>Change fonts and theme from the top right bar.</li>
             <li>Toggle visibility of Entry, List, and Notes boxes using the checkboxes in the toolbar.</li>
+            <li>Use "Clear" button to clear all to-dos and notes.</li>
           </ul>
           <div style={{marginBottom: '0.5em', fontSize: '1em', color: '#888', textAlign: 'center'}}>
             DM <b>@imajinl</b> for questions or feedback on Telegram.
@@ -328,25 +369,20 @@ function App() {
           </form>
         )}
         {showTodoList && (
-          <>
-            <ul className="todo-list">
-              {todos.map((todo, i) => (
-                <li className="todo-item" key={i}>
-                  <input
-                    type="checkbox"
-                    className="todo-checkbox"
-                    checked={todo.done}
-                    onChange={() => toggleTodo(i)}
-                  />
-                  <span style={{textDecoration: todo.done ? 'line-through' : undefined, opacity: todo.done ? 0.5 : 1}}>{todo.text}</span>
-                  <button className="todo-delete-btn" onClick={() => deleteTodo(i)} title="Delete to-do" aria-label="Delete to-do">✕</button>
-                </li>
-              ))}
-            </ul>
-            {todos.length > 0 && (
-              <button onClick={clearTodos} className="todo-delete-btn" style={{margin:'0 0 1.2rem auto',display:'block',fontSize:'1em'}} title="Delete all to-dos" aria-label="Delete all to-dos">Clear all</button>
-            )}
-          </>
+          <ul className="todo-list">
+            {todos.map((todo, i) => (
+              <li className="todo-item" key={i}>
+                <input
+                  type="checkbox"
+                  className="todo-checkbox"
+                  checked={todo.done}
+                  onChange={() => toggleTodo(i)}
+                />
+                <span className={`todo-text ${todo.done ? 'completed' : ''}`}>{todo.text}</span>
+                <button className="todo-delete-btn" onClick={() => deleteTodo(i)} title="Delete to-do" aria-label="Delete to-do">✕</button>
+              </li>
+            ))}
+          </ul>
         )}
         {showNoteBox && (
           <textarea

@@ -137,33 +137,104 @@ button:focus-visible {
   width: 100%;
   max-width: 700px;
   margin: 0 auto 0.7rem auto;
-  padding: 0.7rem 0;
+  padding: 0.5rem 0;
   list-style: none;
   background: var(--input-bg);
   border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px 0 rgba(0,0,0,0.02);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
   min-height: 40vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   box-sizing: border-box;
 }
+[data-theme='dark'] .todo-list {
+  border-color: #ccc;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.2);
+}
 
 .todo-item {
   display: flex;
   align-items: center;
-  padding: 0.25rem 0;
+  padding: 0.75rem 1rem;
   font-size: 1rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  transition: background-color 0.15s ease;
+  border-radius: 6px;
+  margin: 0.1rem 0.5rem;
 }
 .todo-item:last-child {
   border-bottom: none;
 }
+.todo-item:hover {
+  background-color: rgba(0,0,0,0.02);
+}
+[data-theme='dark'] .todo-item:hover {
+  background-color: rgba(255,255,255,0.05);
+}
+[data-theme='dark'] .todo-item {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
 .todo-checkbox {
-  margin-right: 0.7rem;
-  width: 1em;
-  height: 1em;
+  appearance: none;
+  width: 1.2em;
+  height: 1.2em;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  margin-right: 0.85rem;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--bg);
+  flex-shrink: 0;
+}
+.todo-checkbox:hover {
+  border-color: #666;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+.todo-checkbox:checked {
+  background: #333;
+  border-color: #333;
+}
+.todo-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.3em;
+  height: 0.6em;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -60%) rotate(45deg);
+}
+[data-theme='dark'] .todo-checkbox {
+  border-color: #555;
+}
+[data-theme='dark'] .todo-checkbox:hover {
+  border-color: #888;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+}
+[data-theme='dark'] .todo-checkbox:checked {
+  background: #666;
+  border-color: #666;
+}
+
+.todo-text {
+  flex: 1;
+  font-size: 1.05rem;
+  line-height: 1.4;
+  color: var(--fg);
+  transition: all 0.2s ease;
+}
+.todo-text.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+  color: #888;
+}
+[data-theme='dark'] .todo-text.completed {
+  color: #666;
 }
 .todo-input {
   width: 100%;
