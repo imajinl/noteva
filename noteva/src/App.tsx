@@ -266,8 +266,7 @@ function App() {
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
+                  gap: '4px',
                   marginRight: 8,
                   padding: '0.2em 0.5em',
                   borderRadius: 6,
@@ -276,33 +275,57 @@ function App() {
                   height: '32px',
                   boxSizing: 'border-box',
                 }}>
-                  <label style={{display: 'flex', alignItems: 'center', fontSize: '0.85em', gap: '3px', cursor: 'pointer'}}>
-                    <input
-                      type="checkbox"
-                      checked={showTodoEntry}
-                      onChange={e => setShowTodoEntry(e.target.checked)}
-                      style={{margin: 0}}
-                    />
+                  <button
+                    onClick={() => setShowTodoEntry(!showTodoEntry)}
+                    style={{
+                      border: 'none',
+                      background: 'none',
+                      color: showTodoEntry ? 'inherit' : '#888',
+                      fontSize: '0.85em',
+                      cursor: 'pointer',
+                      padding: '2px 6px',
+                      borderRadius: 3,
+                      transition: 'all 0.15s ease',
+                      opacity: showTodoEntry ? 1 : 0.6,
+                      textDecoration: showTodoEntry ? 'none' : 'line-through',
+                    }}
+                  >
                     Entry
-                  </label>
-                  <label style={{display: 'flex', alignItems: 'center', fontSize: '0.85em', gap: '3px', cursor: 'pointer'}}>
-                    <input
-                      type="checkbox"
-                      checked={showTodoList}
-                      onChange={e => setShowTodoList(e.target.checked)}
-                      style={{margin: 0}}
-                    />
+                  </button>
+                  <button
+                    onClick={() => setShowTodoList(!showTodoList)}
+                    style={{
+                      border: 'none',
+                      background: 'none',
+                      color: showTodoList ? 'inherit' : '#888',
+                      fontSize: '0.85em',
+                      cursor: 'pointer',
+                      padding: '2px 6px',
+                      borderRadius: 3,
+                      transition: 'all 0.15s ease',
+                      opacity: showTodoList ? 1 : 0.6,
+                      textDecoration: showTodoList ? 'none' : 'line-through',
+                    }}
+                  >
                     List
-                  </label>
-                  <label style={{display: 'flex', alignItems: 'center', fontSize: '0.85em', gap: '3px', cursor: 'pointer'}}>
-                    <input
-                      type="checkbox"
-                      checked={showNoteBox}
-                      onChange={e => setShowNoteBox(e.target.checked)}
-                      style={{margin: 0}}
-                    />
+                  </button>
+                  <button
+                    onClick={() => setShowNoteBox(!showNoteBox)}
+                    style={{
+                      border: 'none',
+                      background: 'none',
+                      color: showNoteBox ? 'inherit' : '#888',
+                      fontSize: '0.85em',
+                      cursor: 'pointer',
+                      padding: '2px 6px',
+                      borderRadius: 3,
+                      transition: 'all 0.15s ease',
+                      opacity: showNoteBox ? 1 : 0.6,
+                      textDecoration: showNoteBox ? 'none' : 'line-through',
+                    }}
+                  >
                     Notes
-                  </label>
+                  </button>
                 </div>
                 <button
                   onClick={toggleTheme}
@@ -341,12 +364,12 @@ function App() {
           <button onClick={()=>setInfoOpen(false)} style={{position:'absolute',top:12,right:16,border:'none',background:'none',fontSize:22,cursor:'pointer',color:'inherit'}} aria-label="Close info">✕</button>
           <h2 style={{marginTop:0,marginBottom:'1.2em',fontSize:'1.3em'}}>Info</h2>
           <ul style={{paddingLeft:18,marginBottom:'auto',textAlign:'left'}}>
-            <li>Press <b>Enter</b> to add a to-do.</li>
+            <li>Press 'Enter' to add a to-do.</li>
             <li>Your notes and to-dos are saved in your browser (local storage).</li>
             <li>You can export your notes and to-dos as JSON.</li>
             <li>Change fonts and theme from the top right bar.</li>
-            <li>Toggle visibility of Entry, List, and Notes boxes using the checkboxes in the toolbar.</li>
-            <li>Use "Clear" button to clear all to-dos and notes.</li>
+            <li>Toggle visibility of 'Entry', 'List', and 'Notes' boxes by clicking the buttons in the toolbar (strikethrough = hidden).</li>
+            <li>Use 'Clear' button to clear all to-dos and notes.</li>
           </ul>
           <div style={{marginBottom: '0.5em', fontSize: '1em', color: '#888', textAlign: 'center'}}>
             DM <b>@imajinl</b> for questions or feedback on Telegram.
