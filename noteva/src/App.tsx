@@ -44,6 +44,9 @@ function App() {
   const [barHovered, setBarHovered] = useState(false)
   const [time, setTime] = useState(new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}))
   const [btcPrice, setBtcPrice] = useState<number | null>(null)
+  const [showTodoEntry, setShowTodoEntry] = useState(true)
+  const [showTodoList, setShowTodoList] = useState(true)
+  const [showNoteBox, setShowNoteBox] = useState(true)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -74,9 +77,15 @@ function App() {
     const savedNote = localStorage.getItem('noteva-note')
     const savedTodos = localStorage.getItem('noteva-todos')
     const savedFont = localStorage.getItem('noteva-font')
+    const savedShowTodoEntry = localStorage.getItem('noteva-show-todo-entry')
+    const savedShowTodoList = localStorage.getItem('noteva-show-todo-list')
+    const savedShowNoteBox = localStorage.getItem('noteva-show-note-box')
     if (savedNote) setNote(savedNote)
     if (savedTodos) setTodos(JSON.parse(savedTodos))
     if (savedFont) setFont(savedFont)
+    if (savedShowTodoEntry !== null) setShowTodoEntry(savedShowTodoEntry === 'true')
+    if (savedShowTodoList !== null) setShowTodoList(savedShowTodoList === 'true')
+    if (savedShowNoteBox !== null) setShowNoteBox(savedShowNoteBox === 'true')
   }, [])
   // Save to localStorage
   useEffect(() => {
@@ -88,6 +97,15 @@ function App() {
   useEffect(() => {
     localStorage.setItem('noteva-font', font)
   }, [font])
+  useEffect(() => {
+    localStorage.setItem('noteva-show-todo-entry', showTodoEntry.toString())
+  }, [showTodoEntry])
+  useEffect(() => {
+    localStorage.setItem('noteva-show-todo-list', showTodoList.toString())
+  }, [showTodoList])
+  useEffect(() => {
+    localStorage.setItem('noteva-show-note-box', showNoteBox.toString())
+  }, [showNoteBox])
 
   // Toggle theme
   const toggleTheme = () => {
@@ -217,6 +235,35 @@ function App() {
                 >
                   Export
                 </button>
+                <div style={{display: 'flex', alignItems: 'center', gap: '8px', marginRight: 8}}>
+                  <label style={{display: 'flex', alignItems: 'center', fontSize: '0.85em', gap: '3px', cursor: 'pointer'}}>
+                    <input
+                      type="checkbox"
+                      checked={showTodoEntry}
+                      onChange={e => setShowTodoEntry(e.target.checked)}
+                      style={{margin: 0}}
+                    />
+                    Entry
+                  </label>
+                  <label style={{display: 'flex', alignItems: 'center', fontSize: '0.85em', gap: '3px', cursor: 'pointer'}}>
+                    <input
+                      type="checkbox"
+                      checked={showTodoList}
+                      onChange={e => setShowTodoList(e.target.checked)}
+                      style={{margin: 0}}
+                    />
+                    List
+                  </label>
+                  <label style={{display: 'flex', alignItems: 'center', fontSize: '0.85em', gap: '3px', cursor: 'pointer'}}>
+                    <input
+                      type="checkbox"
+                      checked={showNoteBox}
+                      onChange={e => setShowNoteBox(e.target.checked)}
+                      style={{margin: 0}}
+                    />
+                    Notes
+                  </label>
+                </div>
                 <button
                   onClick={toggleTheme}
                   style={{
@@ -258,6 +305,7 @@ function App() {
             <li>Your notes and to-dos are saved in your browser (local storage).</li>
             <li>You can export your notes and to-dos as JSON.</li>
             <li>Change fonts and theme from the top right bar.</li>
+            <li>Toggle visibility of Entry, List, and Notes boxes using the checkboxes in the toolbar.</li>
           </ul>
           <div style={{marginBottom: '0.5em', fontSize: '1em', color: '#888', textAlign: 'center'}}>
             DM <b>@imajinl</b> for questions or feedback on Telegram.
@@ -268,38 +316,46 @@ function App() {
         </div>
       )}
         <h1 className="noteva-heading">noteva <span role="img" aria-label="butterfly">🦋</span></h1>
-        <form onSubmit={addTodo} style={{width: '100%', maxWidth: 700, margin: '0 auto 0.2rem auto'}}>
-          <input
-            className="todo-input"
-            value={todoInput}
-            onChange={e => setTodoInput(e.target.value)}
-            placeholder="Add a to-do..."
-            style={{width: '100%'}}
-          />
-        </form>
-        <ul className="todo-list">
-          {todos.map((todo, i) => (
-            <li className="todo-item" key={i}>
-              <input
-                type="checkbox"
-                className="todo-checkbox"
-                checked={todo.done}
-                onChange={() => toggleTodo(i)}
-              />
-              <span style={{textDecoration: todo.done ? 'line-through' : undefined, opacity: todo.done ? 0.5 : 1}}>{todo.text}</span>
-              <button className="todo-delete-btn" onClick={() => deleteTodo(i)} title="Delete to-do" aria-label="Delete to-do">✕</button>
-            </li>
-          ))}
-        </ul>
-        {todos.length > 0 && (
-          <button onClick={clearTodos} className="todo-delete-btn" style={{margin:'0 0 1.2rem auto',display:'block',fontSize:'1em'}} title="Delete all to-dos" aria-label="Delete all to-dos">Clear all</button>
+        {showTodoEntry && (
+          <form onSubmit={addTodo} style={{width: '100%', maxWidth: 700, margin: '0 auto 0.2rem auto'}}>
+            <input
+              className="todo-input"
+              value={todoInput}
+              onChange={e => setTodoInput(e.target.value)}
+              placeholder="Add a to-do..."
+              style={{width: '100%'}}
+            />
+          </form>
         )}
-        <textarea
-          className="notetaker-textarea"
-          value={note}
-          onChange={e => setNote(e.target.value)}
-          placeholder="Type your note..."
-        />
+        {showTodoList && (
+          <>
+            <ul className="todo-list">
+              {todos.map((todo, i) => (
+                <li className="todo-item" key={i}>
+                  <input
+                    type="checkbox"
+                    className="todo-checkbox"
+                    checked={todo.done}
+                    onChange={() => toggleTodo(i)}
+                  />
+                  <span style={{textDecoration: todo.done ? 'line-through' : undefined, opacity: todo.done ? 0.5 : 1}}>{todo.text}</span>
+                  <button className="todo-delete-btn" onClick={() => deleteTodo(i)} title="Delete to-do" aria-label="Delete to-do">✕</button>
+                </li>
+              ))}
+            </ul>
+            {todos.length > 0 && (
+              <button onClick={clearTodos} className="todo-delete-btn" style={{margin:'0 0 1.2rem auto',display:'block',fontSize:'1em'}} title="Delete all to-dos" aria-label="Delete all to-dos">Clear all</button>
+            )}
+          </>
+        )}
+        {showNoteBox && (
+          <textarea
+            className="notetaker-textarea"
+            value={note}
+            onChange={e => setNote(e.target.value)}
+            placeholder="Type your note..."
+          />
+        )}
       </div>
     </>
   )
