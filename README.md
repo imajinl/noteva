@@ -1,9 +1,12 @@
 # noteva 🦋
 
-minimalistic notetaker and to-do app — everything is saved in your browser's local storage. distraction-free, fast, and customizable.
+minimalistic notetaker and to-do app with rich text formatting — everything is saved in your browser's local storage. distraction-free, fast, and customizable.
 
 ## features
 - **distraction-free notes and to-dos** with clean, modern interface
+- **rich text formatting** — bold, italic, underline, strikethrough, headings, and lists
+- **smart auto-detection** — type '1. ' for numbered lists or '- ' for bullet lists
+- **popup formatting toolbar** — select text to show formatting options
 - **customizable layout** — hide / show Entry, List, or Notes boxes individually
 - **light / dark mode toggle** with theme-aware styling
 - **30+ font options** for personalized typography
@@ -22,6 +25,8 @@ minimalistic notetaker and to-do app — everything is saved in your browser's l
 - **change font:** use the dropdown in the toolbar
 - **switch theme:** click the '🌙' / '☀️' button
 - **export data:** click 'Export' to download your data as JSON
+- **format text:** select text in notes to show formatting popup with bold, italic, underline, headings, and lists
+- **create lists:** type '1. ' for numbered lists or '- ' for bullet lists
 - **get help:** click the 'ℹ️' button for detailed instructions
 
 ## deploy
