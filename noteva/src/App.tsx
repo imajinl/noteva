@@ -47,6 +47,8 @@ function App() {
   const [showTodoEntry, setShowTodoEntry] = useState(true)
   const [showTodoList, setShowTodoList] = useState(true)
   const [showNoteBox, setShowNoteBox] = useState(true)
+  const [showFormatPopup, setShowFormatPopup] = useState(false)
+  const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -80,7 +82,16 @@ function App() {
     const savedShowTodoEntry = localStorage.getItem('noteva-show-todo-entry')
     const savedShowTodoList = localStorage.getItem('noteva-show-todo-list')
     const savedShowNoteBox = localStorage.getItem('noteva-show-note-box')
-    if (savedNote) setNote(savedNote)
+    if (savedNote) {
+      setNote(savedNote)
+      // Set the contentEditable div content
+      setTimeout(() => {
+        const noteDiv = document.getElementById('note-editor')
+        if (noteDiv && savedNote) {
+          noteDiv.innerHTML = savedNote
+        }
+      }, 0)
+    }
     if (savedTodos) setTodos(JSON.parse(savedTodos))
     if (savedFont) setFont(savedFont)
     if (savedShowTodoEntry !== null) setShowTodoEntry(savedShowTodoEntry === 'true')
@@ -136,11 +147,19 @@ function App() {
   const clearAll = () => {
     setTodos([])
     setNote('')
+    // Clear the contentEditable div
+    const noteDiv = document.getElementById('note-editor')
+    if (noteDiv) {
+      noteDiv.innerHTML = ''
+    }
   }
 
   const exportData = () => {
+    // Get HTML content from contentEditable div
+    const noteDiv = document.getElementById('note-editor')
+    const htmlContent = noteDiv?.innerHTML || ''
     const data = {
-      note,
+      note: htmlContent,
       todos,
     }
     const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'})
@@ -150,6 +169,83 @@ function App() {
     a.download = 'noteva-export.json'
     a.click()
     URL.revokeObjectURL(url)
+  }
+
+  // Text formatting functions
+  const formatText = (command: string, value?: string) => {
+    document.execCommand(command, false, value || '')
+    const noteDiv = document.getElementById('note-editor')
+    if (noteDiv) {
+      setNote(noteDiv.innerHTML)
+    }
+  }
+
+  const formatHeading = (level: number) => {
+    formatText('formatBlock', `h${level}`)
+  }
+
+  const handleNoteInput = (e: React.FormEvent<HTMLDivElement>) => {
+    const content = e.currentTarget.innerHTML
+    setNote(content)
+    
+    // Auto-detect list patterns
+    const selection = window.getSelection()
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0)
+      const node = range.startContainer
+      
+      if (node.nodeType === Node.TEXT_NODE && node.textContent) {
+        const text = node.textContent
+        const caretPos = range.startOffset
+        
+        // Get the current line text
+        const lines = text.split('\n')
+        const currentLineIndex = text.substring(0, caretPos).split('\n').length - 1
+        const currentLine = lines[currentLineIndex] || ''
+        
+        // Check for numbered list pattern (1. followed by space)
+        if (currentLine.match(/^\d+\.\s+/) && caretPos === currentLine.length) {
+          setTimeout(() => {
+            // Remove the typed pattern and apply list formatting
+            const newText = currentLine.replace(/^\d+\.\s+/, '')
+            node.textContent = text.replace(currentLine, newText)
+            formatText('insertOrderedList')
+          }, 0)
+        }
+        // Check for bullet list pattern (- followed by space)
+        else if (currentLine.match(/^-\s+/) && caretPos === currentLine.length) {
+          setTimeout(() => {
+            // Remove the typed pattern and apply list formatting
+            const newText = currentLine.replace(/^-\s+/, '')
+            node.textContent = text.replace(currentLine, newText)
+            formatText('insertUnorderedList')
+          }, 0)
+        }
+      }
+    }
+  }
+
+  const handleTextSelection = () => {
+    const selection = window.getSelection()
+    if (selection && selection.toString().length > 0) {
+      const range = selection.getRangeAt(0)
+      const rect = range.getBoundingClientRect()
+      setPopupPosition({
+        x: rect.left + rect.width / 2,
+        y: rect.top - 10
+      })
+      setShowFormatPopup(true)
+    } else {
+      setShowFormatPopup(false)
+    }
+  }
+
+  const handleMouseUp = () => {
+    setTimeout(handleTextSelection, 10)
+  }
+
+  const handleKeyUp = () => {
+    setTimeout(handleTextSelection, 10)
   }
 
   const effectiveFont = font
@@ -384,6 +480,8 @@ function App() {
             <li>Change fonts and theme from the top right bar.</li>
             <li>Toggle visibility of 'Entry', 'List', and 'Notes' boxes by clicking the buttons in the toolbar (strikethrough = hidden).</li>
             <li>Use 'Clear' button to clear all to-dos and notes.</li>
+            <li>Select text in notes to show formatting popup with bold, italic, underline, headings, and lists.</li>
+            <li>Type '1. ' for numbered lists or '- ' for bullet lists.</li>
           </ul>
           <div style={{marginBottom: '0.5em', fontSize: '1em', color: '#888', textAlign: 'center'}}>
             DM <b>@imajinl</b> for questions or feedback on Telegram.
@@ -422,12 +520,243 @@ function App() {
           </ul>
         )}
         {showNoteBox && (
-          <textarea
-            className="notetaker-textarea"
-            value={note}
-            onChange={e => setNote(e.target.value)}
-            placeholder="Type your note..."
-          />
+          <div style={{ width: '100%', maxWidth: 700, margin: '0 auto', position: 'relative' }}>
+            <div
+              id="note-editor"
+              contentEditable
+              onInput={handleNoteInput}
+              onMouseUp={handleMouseUp}
+              onKeyUp={handleKeyUp}
+              style={{
+                width: '100%',
+                minHeight: '40vh',
+                padding: '1rem',
+                fontSize: '1.05rem',
+                borderRadius: '8px',
+                border: '1px solid #ccc',
+                background: 'var(--input-bg)',
+                color: 'var(--fg)',
+                fontFamily: 'inherit',
+                outline: 'none',
+                boxShadow: '0 1px 4px 0 rgba(0,0,0,0.02)',
+                marginBottom: '0.7rem',
+                display: 'block',
+                boxSizing: 'border-box',
+                overflowY: 'auto',
+                lineHeight: '1.5',
+              }}
+                             data-placeholder="Type a note..."
+            />
+            
+            {/* Formatting popup */}
+            {showFormatPopup && (
+              <div
+                style={{
+                  position: 'fixed',
+                  left: popupPosition.x,
+                  top: popupPosition.y,
+                  transform: 'translateX(-50%) translateY(-100%)',
+                  display: 'flex',
+                  gap: '4px',
+                  padding: '8px',
+                  background: dark ? '#1a1a1a' : '#fff',
+                  border: '1px solid #ccc',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  fontSize: '14px',
+                  zIndex: 1000,
+                  maxWidth: '400px',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => formatText('bold')}
+                  style={{
+                    padding: '4px 8px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    background: dark ? '#2a2a2a' : '#f8f9fa',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                  }}
+                  title="Bold"
+                >
+                  B
+                </button>
+                <button
+                  type="button"
+                  onClick={() => formatText('italic')}
+                  style={{
+                    padding: '4px 8px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    background: dark ? '#2a2a2a' : '#f8f9fa',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    fontStyle: 'italic',
+                  }}
+                  title="Italic"
+                >
+                  I
+                </button>
+                <button
+                  type="button"
+                  onClick={() => formatText('underline')}
+                  style={{
+                    padding: '4px 8px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    background: dark ? '#2a2a2a' : '#f8f9fa',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    textDecoration: 'underline',
+                  }}
+                  title="Underline"
+                >
+                  U
+                </button>
+                <button
+                  type="button"
+                  onClick={() => formatText('strikethrough')}
+                  style={{
+                    padding: '4px 8px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    background: dark ? '#2a2a2a' : '#f8f9fa',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    textDecoration: 'line-through',
+                  }}
+                  title="Strikethrough"
+                >
+                  S
+                </button>
+                <div style={{ width: '1px', height: '24px', background: '#ccc', margin: '0 4px' }} />
+                <button
+                  type="button"
+                  onClick={() => formatHeading(1)}
+                  style={{
+                    padding: '4px 8px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    background: dark ? '#2a2a2a' : '#f8f9fa',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                  }}
+                  title="Heading 1"
+                >
+                  H1
+                </button>
+                <button
+                  type="button"
+                  onClick={() => formatHeading(2)}
+                  style={{
+                    padding: '4px 8px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    background: dark ? '#2a2a2a' : '#f8f9fa',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                  }}
+                  title="Heading 2"
+                >
+                  H2
+                </button>
+                <button
+                  type="button"
+                  onClick={() => formatHeading(3)}
+                  style={{
+                    padding: '4px 8px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    background: dark ? '#2a2a2a' : '#f8f9fa',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    fontWeight: 'bold',
+                  }}
+                  title="Heading 3"
+                >
+                  H3
+                </button>
+                <button
+                  type="button"
+                  onClick={() => formatText('formatBlock', 'p')}
+                  style={{
+                    padding: '4px 8px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    background: dark ? '#2a2a2a' : '#f8f9fa',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                  }}
+                  title="Normal Text"
+                >
+                  P
+                </button>
+                <div style={{ width: '1px', height: '24px', background: '#ccc', margin: '0 4px' }} />
+                <button
+                  type="button"
+                  onClick={() => formatText('insertOrderedList')}
+                  style={{
+                    padding: '4px 8px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    background: dark ? '#2a2a2a' : '#f8f9fa',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                  }}
+                  title="Numbered List"
+                >
+                  1.
+                </button>
+                <button
+                  type="button"
+                  onClick={() => formatText('insertUnorderedList')}
+                  style={{
+                    padding: '4px 8px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    background: dark ? '#2a2a2a' : '#f8f9fa',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                  }}
+                  title="Bullet List"
+                >
+                  •
+                </button>
+                <button
+                  type="button"
+                  onClick={() => formatText('removeFormat')}
+                  style={{
+                    padding: '4px 8px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    background: dark ? '#2a2a2a' : '#f8f9fa',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                  }}
+                  title="Clear Formatting"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+          </div>
         )}
       </div>
     </>
