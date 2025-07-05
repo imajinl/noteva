@@ -109,8 +109,8 @@ button:focus-visible {
   align-items: center;
   justify-content: flex-start;
   padding-top: 1.5vh;
-  padding-left: calc(16px - 18.9px);
-  padding-right: calc(116px + 18.9px);
+  padding-left: 1rem;
+  padding-right: 1rem;
   box-sizing: border-box;
 }
 
