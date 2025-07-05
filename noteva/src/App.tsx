@@ -41,13 +41,31 @@ function App() {
   const [todoInput, setTodoInput] = useState('')
   const [font, setFont] = useState(FONT_OPTIONS[0].value)
   const [infoOpen, setInfoOpen] = useState(false)
-  const [barVisible, setBarVisible] = useState(true)
+  const [barHovered, setBarHovered] = useState(false)
   const [time, setTime] = useState(new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}))
+  const [btcPrice, setBtcPrice] = useState<number | null>(null)
 
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}))
     }, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  // Fetch Bitcoin price
+  const fetchBtcPrice = async () => {
+    try {
+      const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd')
+      const data = await response.json()
+      setBtcPrice(data.bitcoin.usd)
+    } catch (error) {
+      console.error('Error fetching BTC price:', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchBtcPrice() // Initial fetch
+    const interval = setInterval(fetchBtcPrice, 60000) // Update every minute
     return () => clearInterval(interval)
   }, [])
 
@@ -117,124 +135,119 @@ function App() {
 
   return (
     <>
-      <div style={{position:'fixed', top:'0.8rem', left:'1rem', fontSize:'0.9rem', color:'var(--fg)', opacity:0.8, pointerEvents:'none', userSelect:'none'}}>
-        {time}
+      <div style={{position:'fixed', top:'0.8rem', left:'1rem', fontSize:'0.9rem', color:'var(--fg)', opacity:0.8, pointerEvents:'none', userSelect:'none', display:'flex', alignItems:'center', gap:'1rem', fontFamily: effectiveFont}}>
+        <span>{time}</span>
+        <span>{btcPrice ? `₿ $${btcPrice.toLocaleString()}` : '₿ ...'}</span>
       </div>
       <div className="notetaker-container" style={{fontFamily: effectiveFont}}>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginBottom: '1.2rem' }}>
-      {barVisible ? (
-        <div
-          style={{
-                position: 'static',
-            display: 'flex',
-            alignItems: 'center',
-            background: dark ? 'var(--bg)' : '#fff',
-            border: dark ? '1px solid #333' : '1px solid #ddd',
-            borderRadius: 8,
-            boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)',
-            padding: '0.3em 1.1em',
-            minHeight: 40,
-          }}
-        >
-          <select
-            value={font}
-            onChange={e => setFont(e.target.value)}
-            style={{
-              fontSize: '1em',
-              padding: '0.2em 0.5em',
-              borderRadius: 6,
-              border: dark ? '1px solid #333' : '1px solid #ccc',
-              background: dark ? 'var(--bg)' : '#fff',
-              color: 'inherit',
-              marginRight: 8,
-            }}
-            aria-label="Choose font"
+          <div
+            style={{ position: 'relative' }}
+            onMouseEnter={() => setBarHovered(true)}
+            onMouseLeave={() => setBarHovered(false)}
           >
-            {FONT_OPTIONS.map(opt => (
-              <option value={opt.value} key={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-          <button
-            onClick={exportData}
-            style={{
-              fontSize: '1em',
-                  padding: '0.2em 0.5em',
-              borderRadius: 6,
-              border: dark ? '1px solid #333' : '1px solid #ccc',
+            {/* Menu trigger - always visible */}
+            <div
+              style={{
+                background: dark ? 'var(--bg)' : '#fff',
+                color: 'inherit',
+                fontSize: 22,
+                borderRadius: 8,
+                boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)',
+                padding: '0.2em 0.7em',
+                cursor: 'pointer',
+                border: dark ? '1px solid #333' : '1px solid #ddd',
+              }}
+              aria-label="Menu"
+              title="Menu"
+            >
+              ≡
+            </div>
+            
+            {/* Full toolbar - shows on hover */}
+            {barHovered && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  display: 'flex',
+                  alignItems: 'center',
                   background: dark ? 'var(--bg)' : '#fff',
-              color: 'inherit',
-              cursor: 'pointer',
-              marginRight: 8,
-            }}
-          >
-            Export
-          </button>
-          <button
-            onClick={toggleTheme}
-            style={{
-              border: 'none',
-              background: 'none',
-              color: 'inherit',
-              fontSize: 20,
-              cursor: 'pointer',
-              marginRight: 0,
-            }}
-            aria-label="Toggle light/dark mode"
-          >
-            {dark ? '🌙' : '☀️'}
-          </button>
-          <button
-            onClick={() => setInfoOpen(true)}
-            style={{
-              border: 'none',
-              background: 'none',
-              color: 'inherit',
-              fontSize: 20,
-              cursor: 'pointer',
-              marginLeft: 0,
-            }}
-            aria-label="Show info"
-          >
-            ℹ️
-          </button>
-          <button
-            onClick={() => setBarVisible(false)}
-            style={{
-              border: 'none',
-              background: 'none',
-              color: 'inherit',
-              fontSize: 18,
-              cursor: 'pointer',
-              marginLeft: 8,
-            }}
-            aria-label="Hide bar"
-            title="Hide bar"
-          >
-            ✕
-          </button>
-        </div>
-      ) : (
-        <button
-          onClick={() => setBarVisible(true)}
-          style={{
-                position: 'static',
-            border: 'none',
-            background: dark ? 'var(--bg)' : '#fff',
-            color: 'inherit',
-            fontSize: 22,
-            borderRadius: 8,
-            boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)',
-            padding: '0.2em 0.7em',
-            cursor: 'pointer',
-          }}
-          aria-label="Show bar"
-          title="Show bar"
-        >
-          ≡
-        </button>
-      )}
+                  border: dark ? '1px solid #333' : '1px solid #ddd',
+                  borderRadius: 8,
+                  boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)',
+                  padding: '0.3em 1.1em',
+                  minHeight: 40,
+                  zIndex: 10,
+                }}
+              >
+                <select
+                  value={font}
+                  onChange={e => setFont(e.target.value)}
+                  style={{
+                    fontSize: '1em',
+                    padding: '0.2em 0.5em',
+                    borderRadius: 6,
+                    border: dark ? '1px solid #333' : '1px solid #ccc',
+                    background: dark ? 'var(--bg)' : '#fff',
+                    color: 'inherit',
+                    marginRight: 8,
+                  }}
+                  aria-label="Choose font"
+                >
+                  {FONT_OPTIONS.map(opt => (
+                    <option value={opt.value} key={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={exportData}
+                  style={{
+                    fontSize: '1em',
+                    padding: '0.2em 0.5em',
+                    borderRadius: 6,
+                    border: dark ? '1px solid #333' : '1px solid #ccc',
+                    background: dark ? 'var(--bg)' : '#fff',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    marginRight: 8,
+                  }}
+                >
+                  Export
+                </button>
+                <button
+                  onClick={toggleTheme}
+                  style={{
+                    border: 'none',
+                    background: 'none',
+                    color: 'inherit',
+                    fontSize: 20,
+                    cursor: 'pointer',
+                    marginRight: 0,
+                  }}
+                  aria-label="Toggle light/dark mode"
+                >
+                  {dark ? '🌙' : '☀️'}
+                </button>
+                <button
+                  onClick={() => setInfoOpen(true)}
+                  style={{
+                    border: 'none',
+                    background: 'none',
+                    color: 'inherit',
+                    fontSize: 20,
+                    cursor: 'pointer',
+                    marginLeft: 0,
+                  }}
+                  aria-label="Show info"
+                >
+                  ℹ️
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       {infoOpen && (
         <div style={{position:'fixed',top:0,right:0,width:'320px',maxWidth:'90vw',height:'100vh',background:'var(--bg)',color:'var(--fg)',boxShadow:'-2px 0 16px 0 rgba(0,0,0,0.10)',zIndex:1000,display:'flex',flexDirection:'column',padding:'2rem 1.5rem 1.5rem 1.5rem',transition:'transform 0.2s',fontSize:'1.08em'}}>
