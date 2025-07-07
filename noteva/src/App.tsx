@@ -694,6 +694,23 @@ function App() {
                 </button>
                 <button
                   type="button"
+                  onClick={() => formatText('italic')}
+                  style={{
+                    padding: '4px 8px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    background: dark ? '#2a2a2a' : '#f8f9fa',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    fontStyle: 'italic',
+                  }}
+                  title="Italic"
+                >
+                  I
+                </button>
+                <button
+                  type="button"
                   onClick={() => formatText('underline')}
                   style={{
                     padding: '4px 8px',
