@@ -49,6 +49,7 @@ function App() {
   const [showNoteBox, setShowNoteBox] = useState(true)
   const [showFormatPopup, setShowFormatPopup] = useState(false)
   const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 })
+  const [menuClicked, setMenuClicked] = useState(false)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -131,6 +132,19 @@ function App() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light')
   }, [dark])
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element
+      if (menuClicked && !target.closest('[data-menu-container]')) {
+        setMenuClicked(false)
+      }
+    }
+    
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [menuClicked])
 
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault()
@@ -252,7 +266,7 @@ function App() {
 
   return (
     <>
-      <div style={{position:'fixed', top:'0.8rem', left:'1rem', fontSize:'0.9rem', color:'var(--fg)', opacity:0.8, pointerEvents:'none', userSelect:'none', display:'flex', alignItems:'center', gap:'1rem', fontFamily: effectiveFont}}>
+      <div className="time-btc-display" style={{fontSize:'0.9rem', color:'var(--fg)', opacity:0.8, pointerEvents:'none', userSelect:'none', display:'flex', alignItems:'center', gap:'1rem', fontFamily: effectiveFont}}>
         <span>{time}</span>
         <span>{btcPrice ? `₿ $${btcPrice.toLocaleString()}` : '₿ ...'}</span>
       </div>
@@ -262,9 +276,11 @@ function App() {
             style={{ position: 'relative' }}
             onMouseEnter={() => setBarHovered(true)}
             onMouseLeave={() => setBarHovered(false)}
+            data-menu-container
           >
             {/* Menu trigger - always visible */}
             <div
+              onClick={() => setMenuClicked(!menuClicked)}
               style={{
                 background: dark ? 'var(--bg)' : '#fff',
                 color: 'inherit',
@@ -281,9 +297,10 @@ function App() {
               ≡
             </div>
             
-            {/* Full toolbar - shows on hover */}
-            {barHovered && (
+            {/* Full toolbar - shows on hover or click */}
+            {(barHovered || menuClicked) && (
               <div
+                className="toolbar-popup"
                 style={{
                   position: 'absolute',
                   top: 0,

@@ -329,3 +329,43 @@ button:focus-visible {
 .todo-delete-btn:hover {
   color: #d33;
 }
+
+/* Time and BTC price display */
+.time-btc-display {
+  position: fixed;
+  top: 0.8rem;
+  left: 1rem;
+}
+
+/* On mobile, make time/BTC display non-sticky to prevent blocking content */
+@media (max-width: 768px) {
+  .time-btc-display {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin: 1rem;
+    justify-content: center;
+  }
+  
+  /* Make menu toolbar mobile-friendly */
+  .toolbar-popup {
+    position: fixed !important;
+    top: 60px !important;
+    right: 10px !important;
+    left: 10px !important;
+    width: auto !important;
+    max-width: none !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    padding: 1rem !important;
+    z-index: 1000 !important;
+  }
+  
+  /* Make menu buttons more touch-friendly on mobile */
+  .notetaker-container button,
+  .notetaker-container select {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    touch-action: manipulation;
+  }
+}
