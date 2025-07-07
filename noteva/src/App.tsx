@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import html2pdf from 'html2pdf.js'
 
 const FONT_OPTIONS = [
@@ -834,6 +835,7 @@ function App() {
           </div>
         )}
       </div>
+      <Analytics />
     </>
   )
 }
