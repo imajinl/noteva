@@ -134,16 +134,16 @@ button:focus-visible {
 }
 
 /* Placeholder styling for contentEditable */
-#note-editor:empty::before {
+#note-editor.empty::before {
   content: attr(data-placeholder);
   color: #999;
-  font-style: italic;
   pointer-events: none;
-  position: absolute;
+  opacity: 1;
 }
 
-[data-theme='dark'] #note-editor:empty::before {
+[data-theme='dark'] #note-editor.empty::before {
   color: #666;
+  opacity: 1;
 }
 
 /* Ensure formatting buttons don't interfere with focus */
@@ -315,6 +315,15 @@ button:focus-visible {
   font-family: inherit;
   outline: none;
   box-sizing: border-box;
+}
+
+.todo-input::placeholder {
+  color: #999;
+  opacity: 1;
+}
+
+[data-theme='dark'] .todo-input::placeholder {
+  color: #666;
 }
 .todo-delete-btn {
   margin-left: auto;

@@ -93,6 +93,16 @@ function App() {
         const noteDiv = document.getElementById('note-editor')
         if (noteDiv && savedNote) {
           noteDiv.innerHTML = savedNote
+          const isEmpty = !savedNote || savedNote.trim() === '' || savedNote === '<br>' || savedNote === '<div><br></div>'
+          noteDiv.classList.toggle('empty', isEmpty)
+        }
+      }, 0)
+    } else {
+      // If no saved note, make sure empty class is set
+      setTimeout(() => {
+        const noteDiv = document.getElementById('note-editor')
+        if (noteDiv) {
+          noteDiv.classList.add('empty')
         }
       }, 0)
     }
@@ -124,11 +134,16 @@ function App() {
 
   // Restore note content when note box is shown
   useEffect(() => {
-    if (showNoteBox && note) {
+    if (showNoteBox) {
       setTimeout(() => {
         const noteDiv = document.getElementById('note-editor')
-        if (noteDiv && noteDiv.innerHTML === '') {
-          noteDiv.innerHTML = note
+        if (noteDiv) {
+          if (note && noteDiv.innerHTML === '') {
+            noteDiv.innerHTML = note
+          }
+          // Update empty class for placeholder
+          const isEmpty = !note || note.trim() === '' || note === '<br>' || note === '<div><br></div>'
+          noteDiv.classList.toggle('empty', isEmpty)
         }
       }, 0)
     }
@@ -180,6 +195,7 @@ function App() {
     const noteDiv = document.getElementById('note-editor')
     if (noteDiv) {
       noteDiv.innerHTML = ''
+      noteDiv.classList.add('empty')
     }
   }
 
@@ -290,6 +306,10 @@ function App() {
   const handleNoteInput = (e: React.FormEvent<HTMLDivElement>) => {
     const content = e.currentTarget.innerHTML
     setNote(content)
+    
+    // Update empty class for placeholder
+    const isEmpty = !content || content.trim() === '' || content === '<br>' || content === '<div><br></div>'
+    e.currentTarget.classList.toggle('empty', isEmpty)
     
     // Auto-detect list patterns
     const selection = window.getSelection()
@@ -633,6 +653,12 @@ function App() {
               onInput={handleNoteInput}
               onMouseUp={handleMouseUp}
               onKeyUp={handleKeyUp}
+              onFocus={(e) => e.currentTarget.classList.remove('empty')}
+              onBlur={(e) => {
+                const content = e.currentTarget.innerHTML
+                const isEmpty = !content || content.trim() === '' || content === '<br>' || content === '<div><br></div>'
+                e.currentTarget.classList.toggle('empty', isEmpty)
+              }}
               style={{
                 width: '100%',
                 minHeight: '40vh',
