@@ -13,7 +13,7 @@ minimalistic notetaker and to-do app with rich text formatting — everything is
 - **bitcoin price display** via CoinGecko API (updates every minute)
 - **enhanced to-do list** with custom checkboxes and smooth animations
 - **local storage persistence** — all data saved automatically in your browser
-- **json export** for backup and portability
+- **pdf export** for backup and portability
 - **responsive design** works on desktop and mobile
 
 ## usage
@@ -24,7 +24,7 @@ minimalistic notetaker and to-do app with rich text formatting — everything is
 - **hide / show sections:** click 'Entry', 'List', or 'Notes' in the toolbar (strikethrough = hidden)
 - **change font:** use the dropdown in the toolbar
 - **switch theme:** click the '🌙' / '☀️' button
-- **export data:** click 'Export' to download your data as JSON
+- **export data:** click 'Export' to download your data as PDF
 - **format text:** select text in notes to show formatting popup with bold, underline, headings, and lists
 - **create lists:** type '1. ' for numbered lists or '- ' for bullet lists
 - **get help:** click the 'ℹ️' button for detailed instructions

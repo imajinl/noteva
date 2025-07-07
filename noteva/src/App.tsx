@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import html2pdf from 'html2pdf.js'
 
 const FONT_OPTIONS = [
   { label: 'Inter', value: 'Inter, system-ui, sans-serif' },
@@ -169,20 +170,94 @@ function App() {
   }
 
   const exportData = () => {
-    // Get HTML content from contentEditable div
+    // Create a container with all the content for PDF export
+    const container = document.createElement('div')
+    container.style.padding = '20px'
+    container.style.fontFamily = font
+    container.style.backgroundColor = '#ffffff'
+    container.style.color = '#000000'
+    container.style.lineHeight = '1.6'
+    
+    // Add title
+    const title = document.createElement('h1')
+    title.textContent = 'Noteva Export'
+    title.style.marginBottom = '30px'
+    title.style.borderBottom = '2px solid #333'
+    title.style.paddingBottom = '10px'
+    container.appendChild(title)
+    
+    // Add date
+    const dateDiv = document.createElement('div')
+    dateDiv.textContent = `Exported on: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}`
+    dateDiv.style.marginBottom = '30px'
+    dateDiv.style.color = '#666'
+    dateDiv.style.fontSize = '14px'
+    container.appendChild(dateDiv)
+    
+    // Add notes section if there are notes
     const noteDiv = document.getElementById('note-editor')
     const htmlContent = noteDiv?.innerHTML || ''
-    const data = {
-      note: htmlContent,
-      todos,
+    if (htmlContent.trim()) {
+      const notesTitle = document.createElement('h2')
+      notesTitle.textContent = 'Notes'
+      notesTitle.style.marginTop = '20px'
+      notesTitle.style.marginBottom = '15px'
+      container.appendChild(notesTitle)
+      
+      const notesContent = document.createElement('div')
+      notesContent.innerHTML = htmlContent
+      notesContent.style.marginBottom = '30px'
+      container.appendChild(notesContent)
     }
-    const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'})
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'noteva-export.json'
-    a.click()
-    URL.revokeObjectURL(url)
+    
+    // Add todos section if there are todos
+    if (todos.length > 0) {
+      const todosTitle = document.createElement('h2')
+      todosTitle.textContent = 'To-dos'
+      todosTitle.style.marginTop = '20px'
+      todosTitle.style.marginBottom = '15px'
+      container.appendChild(todosTitle)
+      
+      const todosList = document.createElement('ul')
+      todosList.style.listStyle = 'none'
+      todosList.style.padding = '0'
+      
+      todos.forEach(todo => {
+        const todoItem = document.createElement('li')
+        todoItem.style.marginBottom = '8px'
+        todoItem.style.display = 'flex'
+        todoItem.style.alignItems = 'center'
+        
+        const checkbox = document.createElement('span')
+        checkbox.textContent = todo.done ? '☑' : '☐'
+        checkbox.style.marginRight = '10px'
+        checkbox.style.fontSize = '16px'
+        
+        const text = document.createElement('span')
+        text.textContent = todo.text
+        if (todo.done) {
+          text.style.textDecoration = 'line-through'
+          text.style.color = '#888'
+        }
+        
+        todoItem.appendChild(checkbox)
+        todoItem.appendChild(text)
+        todosList.appendChild(todoItem)
+      })
+      
+      container.appendChild(todosList)
+    }
+    
+    // Generate PDF
+    const options = {
+      margin: 1,
+      filename: 'noteva-export.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    }
+    
+    html2pdf().set(options).from(container).save()
   }
 
   // Text formatting functions
@@ -493,7 +568,7 @@ function App() {
           <ul style={{paddingLeft:18,marginBottom:'auto',textAlign:'left'}}>
             <li>Press 'Enter' to add a to-do.</li>
             <li>Your notes and to-dos are saved in your browser (local storage).</li>
-            <li>You can export your notes and to-dos as JSON.</li>
+            <li>You can export your notes and to-dos as PDF.</li>
             <li>Change fonts and theme from the top right bar.</li>
             <li>Toggle visibility of 'Entry', 'List', and 'Notes' boxes by clicking the buttons in the toolbar (strikethrough = hidden).</li>
             <li>Use 'Clear' button to clear all to-dos and notes.</li>
