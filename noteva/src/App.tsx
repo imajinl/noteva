@@ -122,6 +122,18 @@ function App() {
     localStorage.setItem('noteva-show-note-box', showNoteBox.toString())
   }, [showNoteBox])
 
+  // Restore note content when note box is shown
+  useEffect(() => {
+    if (showNoteBox && note) {
+      setTimeout(() => {
+        const noteDiv = document.getElementById('note-editor')
+        if (noteDiv && noteDiv.innerHTML === '') {
+          noteDiv.innerHTML = note
+        }
+      }, 0)
+    }
+  }, [showNoteBox, note])
+
   // Toggle theme
   const toggleTheme = () => {
     setDark((d) => {
