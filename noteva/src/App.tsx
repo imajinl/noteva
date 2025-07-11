@@ -371,6 +371,49 @@ function App() {
     setTimeout(handleTextSelection, 10)
   }
 
+  const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    
+    // Get plain text from clipboard
+    const text = e.clipboardData.getData('text/plain')
+    
+    if (text) {
+      // Get current selection
+      const selection = window.getSelection()
+      if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0)
+        
+        // Delete any selected content
+        range.deleteContents()
+        
+        // Preserve spacing by converting line breaks to HTML
+        const lines = text.split('\n')
+        const fragment = document.createDocumentFragment()
+        
+        lines.forEach((line, index) => {
+          if (index > 0) {
+            fragment.appendChild(document.createElement('br'))
+          }
+          if (line.trim() || index === 0) {
+            fragment.appendChild(document.createTextNode(line))
+          }
+        })
+        
+        range.insertNode(fragment)
+        
+        // Move cursor to end of inserted content
+        range.setStart(fragment.lastChild || fragment, fragment.lastChild?.textContent?.length || 0)
+        range.collapse(true)
+        selection.removeAllRanges()
+        selection.addRange(range)
+        
+        // Trigger input event to update state
+        const inputEvent = new Event('input', { bubbles: true })
+        e.currentTarget.dispatchEvent(inputEvent)
+      }
+    }
+  }
+
   const effectiveFont = font
 
   return (
@@ -653,6 +696,7 @@ function App() {
               onInput={handleNoteInput}
               onMouseUp={handleMouseUp}
               onKeyUp={handleKeyUp}
+              onPaste={handlePaste}
               onFocus={(e) => e.currentTarget.classList.remove('empty')}
               onBlur={(e) => {
                 const content = e.currentTarget.innerHTML
