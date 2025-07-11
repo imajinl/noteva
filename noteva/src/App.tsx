@@ -959,7 +959,7 @@ function App() {
                   }}
                   title="Bullet List"
                 >
-                  •
+                  -
                 </button>
                 <button
                   type="button"
