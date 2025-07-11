@@ -176,6 +176,50 @@ function App() {
     return () => document.removeEventListener('click', handleClickOutside)
   }, [menuClicked])
 
+  const handleSelectionChange = () => {
+    // Only handle selection changes within the note editor
+    const selection = window.getSelection()
+    if (selection && selection.anchorNode) {
+      const noteEditor = document.getElementById('note-editor')
+      if (noteEditor && noteEditor.contains(selection.anchorNode)) {
+        const selectedText = selection.toString().trim()
+        if (selectedText.length > 0) {
+          const range = selection.getRangeAt(0)
+          const rect = range.getBoundingClientRect()
+          setPopupPosition({
+            x: rect.left + rect.width / 2,
+            y: rect.top - 10
+          })
+          setShowFormatPopup(true)
+        } else {
+          setShowFormatPopup(false)
+        }
+      } else {
+        // If selection is outside note editor, hide popup
+        setShowFormatPopup(false)
+      }
+    }
+  }
+
+  // Handle selection changes globally
+  useEffect(() => {
+    document.addEventListener('selectionchange', handleSelectionChange)
+    return () => document.removeEventListener('selectionchange', handleSelectionChange)
+  }, [handleSelectionChange])
+
+  // Hide popup when clicking outside
+  useEffect(() => {
+    const handleDocumentClick = (event: MouseEvent) => {
+      const target = event.target as Element
+      if (showFormatPopup && !target.closest('#note-editor') && !target.closest('[data-format-popup]')) {
+        setShowFormatPopup(false)
+      }
+    }
+    
+    document.addEventListener('mousedown', handleDocumentClick)
+    return () => document.removeEventListener('mousedown', handleDocumentClick)
+  }, [showFormatPopup])
+
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault()
     if (!todoInput.trim()) return
@@ -350,7 +394,7 @@ function App() {
 
   const handleTextSelection = () => {
     const selection = window.getSelection()
-    if (selection && selection.toString().length > 0) {
+    if (selection && selection.toString().trim().length > 0) {
       const range = selection.getRangeAt(0)
       const rect = range.getBoundingClientRect()
       setPopupPosition({
@@ -364,12 +408,14 @@ function App() {
   }
 
   const handleMouseUp = () => {
-    setTimeout(handleTextSelection, 10)
+    setTimeout(handleTextSelection, 50)
   }
 
   const handleKeyUp = () => {
-    setTimeout(handleTextSelection, 10)
+    setTimeout(handleTextSelection, 50)
   }
+
+
 
   const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -727,6 +773,7 @@ function App() {
             {/* Formatting popup */}
             {showFormatPopup && (
               <div
+                data-format-popup
                 style={{
                   position: 'fixed',
                   left: popupPosition.x,
