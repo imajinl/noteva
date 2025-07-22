@@ -748,7 +748,7 @@ function App() {
                 >
                   Clear
                 </button>
-                <button
+                                <button
                   onClick={() => setShowAiPopup(!showAiPopup)}
                   style={{
                     border: 'none',
@@ -756,7 +756,7 @@ function App() {
                     color: 'inherit',
                     fontSize: 20,
                     cursor: 'pointer',
-                    marginRight: 8,
+                    marginRight: 2,
                     opacity: aiLoading ? 0.5 : 1,
                   }}
                   disabled={aiLoading}
@@ -764,35 +764,35 @@ function App() {
                   data-ai-trigger
                 >
                   🤖
-          </button>
-          <button
-            onClick={toggleTheme}
-            style={{
-              border: 'none',
-              background: 'none',
-              color: 'inherit',
-              fontSize: 20,
-              cursor: 'pointer',
-              marginRight: 0,
-            }}
-            aria-label="Toggle light/dark mode"
-          >
-            {dark ? '🌙' : '☀️'}
-          </button>
-          <button
-            onClick={() => setInfoOpen(true)}
-            style={{
-              border: 'none',
-              background: 'none',
-              color: 'inherit',
-              fontSize: 20,
-              cursor: 'pointer',
-              marginLeft: 0,
-            }}
-            aria-label="Show info"
-          >
-            ℹ️
-          </button>
+                </button>
+                <button
+                  onClick={toggleTheme}
+                  style={{
+                    border: 'none',
+                    background: 'none',
+                    color: 'inherit',
+                    fontSize: 20,
+                    cursor: 'pointer',
+                    marginRight: 2,
+                  }}
+                  aria-label="Toggle light/dark mode"
+                >
+                  {dark ? '🌙' : '☀️'}
+                </button>
+                <button
+                  onClick={() => setInfoOpen(true)}
+                  style={{
+                    border: 'none',
+                    background: 'none',
+                    color: 'inherit',
+                    fontSize: 20,
+                    cursor: 'pointer',
+                    marginRight: 0,
+                  }}
+                  aria-label="Show info"
+                >
+                  ℹ️
+                </button>
               </div>
             )}
           </div>
@@ -905,7 +905,7 @@ function App() {
                   opacity: aiLoading ? 0.5 : 1,
                 }}
               >
-                ✅ Generate Todos
+                ✅ Generate To-dos
           </button>
               
         <button
@@ -952,6 +952,8 @@ function App() {
             <li>Use 'Clear' button to clear all to-dos and notes.</li>
             <li>Select text in notes to show formatting popup with bold, underline, headings, and lists.</li>
             <li>Type '1. ' for numbered lists or '- ' for bullet lists.</li>
+            <li>AI Features: Click the robot icon for AI-powered text improvement, expansion, summarization, and to-do generation.</li>
+            <li>Quick AI: Select any text and use ✨ (improve) and 📝 (expand) buttons in the formatting popup.</li>
           </ul>
           <div style={{marginBottom: '0.5em', fontSize: '1em', color: '#888', textAlign: 'center'}}>
             DM <b>@imajinl</b> for questions or feedback on Telegram.

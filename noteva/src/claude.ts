@@ -127,7 +127,7 @@ export const generateTodos = async (text: string): Promise<ClaudeResponse> => {
       max_tokens: 1000,
       messages: [{
         role: 'user',
-        content: `Based on this text, generate a list of specific, actionable to-do items. Each item should be concrete and achievable. Return only the todo items, one per line, without numbers or bullet points:
+        content: `Based on this text, generate a list of specific, actionable to-do items. Each item should be concrete and achievable. Return only the to-do items, one per line, without numbers or bullet points:
 
 ${text}`
       }]
