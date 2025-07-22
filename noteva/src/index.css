@@ -394,3 +394,14 @@ button:focus-visible {
     touch-action: manipulation;
   }
 }
+
+/* Adjust main container to account for fixed menu */
+.notetaker-container {
+  padding-right: 80px;
+}
+
+@media (max-width: 768px) {
+  .notetaker-container {
+    padding-right: 1rem;
+  }
+}

@@ -182,6 +182,8 @@ function App() {
     return () => document.removeEventListener('click', handleClickOutside)
   }, [menuClicked])
 
+
+
   const handleSelectionChange = () => {
     // Only handle selection changes within the note editor
     const selection = window.getSelection()
@@ -559,8 +561,13 @@ function App() {
       </div>
       <div className="notetaker-container" style={{fontFamily: effectiveFont}}>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginBottom: '1.2rem' }}>
-          <div
-            style={{ position: 'relative' }}
+        <div
+                      style={{ 
+              position: 'fixed',
+              top: '20px',
+              right: '20px',
+              zIndex: 100
+            }}
             onMouseEnter={() => setBarHovered(true)}
             onMouseLeave={() => setBarHovered(false)}
             data-menu-container
@@ -592,39 +599,39 @@ function App() {
                   position: 'absolute',
                   top: 0,
                   right: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  background: dark ? 'var(--bg)' : '#fff',
-                  border: dark ? '1px solid #333' : '1px solid #ddd',
-                  borderRadius: 8,
-                  boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)',
-                  padding: '0.3em 1.1em',
-                  minHeight: 40,
-                  zIndex: 10,
-                }}
-              >
-                <select
-                  value={font}
-                  onChange={e => setFont(e.target.value)}
-                  style={{
-                    fontSize: '1em',
-                    padding: '0.2em 0.5em',
-                    borderRadius: 6,
-                    border: dark ? '1px solid #333' : '1px solid #ccc',
-                    background: dark ? 'var(--bg)' : '#fff',
-                    color: 'inherit',
-                    marginRight: 8,
+            display: 'flex',
+            alignItems: 'center',
+            background: dark ? 'var(--bg)' : '#fff',
+            border: dark ? '1px solid #333' : '1px solid #ddd',
+            borderRadius: 8,
+            boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)',
+            padding: '0.3em 1.1em',
+            minHeight: 40,
+                  zIndex: 101,
+          }}
+        >
+          <select
+            value={font}
+            onChange={e => setFont(e.target.value)}
+            style={{
+              fontSize: '1em',
+              padding: '0.2em 0.5em',
+              borderRadius: 6,
+              border: dark ? '1px solid #333' : '1px solid #ccc',
+              background: dark ? 'var(--bg)' : '#fff',
+              color: 'inherit',
+              marginRight: 8,
                     height: '32px',
                     boxSizing: 'border-box',
-                  }}
-                  aria-label="Choose font"
-                >
-                  {FONT_OPTIONS.map(opt => (
-                    <option value={opt.value} key={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+            }}
+            aria-label="Choose font"
+          >
+            {FONT_OPTIONS.map(opt => (
+              <option value={opt.value} key={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -701,26 +708,26 @@ function App() {
                     Notes
                   </button>
                 </div>
-                <button
-                  onClick={exportData}
-                  style={{
+          <button
+            onClick={exportData}
+            style={{
                     fontSize: '0.85em',
-                    padding: '0.2em 0.5em',
-                    borderRadius: 6,
-                    border: dark ? '1px solid #333' : '1px solid #ccc',
-                    background: dark ? 'var(--bg)' : '#fff',
-                    color: 'inherit',
-                    cursor: 'pointer',
-                    marginRight: 8,
+                  padding: '0.2em 0.5em',
+              borderRadius: 6,
+              border: dark ? '1px solid #333' : '1px solid #ccc',
+                  background: dark ? 'var(--bg)' : '#fff',
+              color: 'inherit',
+              cursor: 'pointer',
+              marginRight: 8,
                     minWidth: '70px',
                     height: '32px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                  }}
-                >
-                  Export
-                </button>
+            }}
+          >
+            Export
+          </button>
                 <button
                   onClick={clearAll}
                   style={{
@@ -757,35 +764,35 @@ function App() {
                   data-ai-trigger
                 >
                   🤖
-                </button>
-                <button
-                  onClick={toggleTheme}
-                  style={{
-                    border: 'none',
-                    background: 'none',
-                    color: 'inherit',
-                    fontSize: 20,
-                    cursor: 'pointer',
-                    marginRight: 0,
-                  }}
-                  aria-label="Toggle light/dark mode"
-                >
-                  {dark ? '🌙' : '☀️'}
-                </button>
-                <button
-                  onClick={() => setInfoOpen(true)}
-                  style={{
-                    border: 'none',
-                    background: 'none',
-                    color: 'inherit',
-                    fontSize: 20,
-                    cursor: 'pointer',
-                    marginLeft: 0,
-                  }}
-                  aria-label="Show info"
-                >
-                  ℹ️
-                </button>
+          </button>
+          <button
+            onClick={toggleTheme}
+            style={{
+              border: 'none',
+              background: 'none',
+              color: 'inherit',
+              fontSize: 20,
+              cursor: 'pointer',
+              marginRight: 0,
+            }}
+            aria-label="Toggle light/dark mode"
+          >
+            {dark ? '🌙' : '☀️'}
+          </button>
+          <button
+            onClick={() => setInfoOpen(true)}
+            style={{
+              border: 'none',
+              background: 'none',
+              color: 'inherit',
+              fontSize: 20,
+              cursor: 'pointer',
+              marginLeft: 0,
+            }}
+            aria-label="Show info"
+          >
+            ℹ️
+          </button>
               </div>
             )}
           </div>
@@ -899,24 +906,24 @@ function App() {
                 }}
               >
                 ✅ Generate Todos
-              </button>
+          </button>
               
-              <button
+        <button
                 onClick={() => handleAiOperation('brainstorm')}
                 disabled={aiLoading}
-                style={{
+          style={{
                   padding: '8px 12px',
                   border: '1px solid #ccc',
                   borderRadius: '6px',
                   background: dark ? '#2a2a2a' : '#f8f9fa',
-                  color: 'inherit',
+            color: 'inherit',
                   cursor: aiLoading ? 'not-allowed' : 'pointer',
                   fontSize: '14px',
                   opacity: aiLoading ? 0.5 : 1,
                 }}
               >
                 💡 Brainstorm Ideas
-              </button>
+        </button>
             </div>
             
             {aiLoading && (
@@ -928,8 +935,8 @@ function App() {
               }}>
                 🤖 Working...
               </div>
-            )}
-          </div>
+      )}
+        </div>
         )}
 
       {infoOpen && (
@@ -956,31 +963,31 @@ function App() {
       )}
         <h1 className="noteva-heading">noteva <span role="img" aria-label="butterfly">🦋</span></h1>
         {showTodoEntry && (
-          <form onSubmit={addTodo} style={{width: '100%', maxWidth: 700, margin: '0 auto 0.2rem auto'}}>
-            <input
-              className="todo-input"
-              value={todoInput}
-              onChange={e => setTodoInput(e.target.value)}
-              placeholder="Add a to-do..."
-              style={{width: '100%'}}
-            />
-          </form>
+        <form onSubmit={addTodo} style={{width: '100%', maxWidth: 700, margin: '0 auto 0.2rem auto'}}>
+          <input
+            className="todo-input"
+            value={todoInput}
+            onChange={e => setTodoInput(e.target.value)}
+            placeholder="Add a to-do..."
+            style={{width: '100%'}}
+          />
+        </form>
         )}
         {showTodoList && (
-          <ul className="todo-list">
-            {todos.map((todo, i) => (
-              <li className="todo-item" key={i}>
-                <input
-                  type="checkbox"
-                  className="todo-checkbox"
-                  checked={todo.done}
-                  onChange={() => toggleTodo(i)}
-                />
+        <ul className="todo-list">
+          {todos.map((todo, i) => (
+            <li className="todo-item" key={i}>
+              <input
+                type="checkbox"
+                className="todo-checkbox"
+                checked={todo.done}
+                onChange={() => toggleTodo(i)}
+              />
                 <span className={`todo-text ${todo.done ? 'completed' : ''}`}>{todo.text}</span>
-                <button className="todo-delete-btn" onClick={() => deleteTodo(i)} title="Delete to-do" aria-label="Delete to-do">✕</button>
-              </li>
-            ))}
-          </ul>
+              <button className="todo-delete-btn" onClick={() => deleteTodo(i)} title="Delete to-do" aria-label="Delete to-do">✕</button>
+            </li>
+          ))}
+        </ul>
         )}
         {showNoteBox && (
           <div style={{ width: '100%', maxWidth: 700, margin: '0 auto', position: 'relative' }}>
