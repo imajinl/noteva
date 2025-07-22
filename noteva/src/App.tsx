@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import html2pdf from 'html2pdf.js'
+import { improveText, expandText, summarizeText, generateTodos, brainstormIdeas } from './claude'
+import type { ClaudeResponse } from './claude'
 
 const FONT_OPTIONS = [
   { label: 'Inter', value: 'Inter, system-ui, sans-serif' },
@@ -53,6 +55,10 @@ function App() {
   const [showFormatPopup, setShowFormatPopup] = useState(false)
   const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 })
   const [menuClicked, setMenuClicked] = useState(false)
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiError, setAiError] = useState('')
+  const [showAiPopup, setShowAiPopup] = useState(false)
+  const [selectedText, setSelectedText] = useState('')
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -182,8 +188,9 @@ function App() {
     if (selection && selection.anchorNode) {
       const noteEditor = document.getElementById('note-editor')
       if (noteEditor && noteEditor.contains(selection.anchorNode)) {
-        const selectedText = selection.toString().trim()
-        if (selectedText.length > 0) {
+        const selectedTextValue = selection.toString().trim()
+        setSelectedText(selectedTextValue)
+        if (selectedTextValue.length > 0) {
           const range = selection.getRangeAt(0)
           const rect = range.getBoundingClientRect()
           setPopupPosition({
@@ -193,10 +200,12 @@ function App() {
           setShowFormatPopup(true)
         } else {
           setShowFormatPopup(false)
+          setSelectedText('')
         }
       } else {
         // If selection is outside note editor, hide popup
         setShowFormatPopup(false)
+        setSelectedText('')
       }
     }
   }
@@ -211,14 +220,17 @@ function App() {
   useEffect(() => {
     const handleDocumentClick = (event: MouseEvent) => {
       const target = event.target as Element
-      if (showFormatPopup && !target.closest('#note-editor') && !target.closest('[data-format-popup]')) {
+      if (showFormatPopup && !target.closest('#note-editor') && !target.closest('[data-format-popup]') && !target.closest('[data-ai-popup]')) {
         setShowFormatPopup(false)
+      }
+      if (showAiPopup && !target.closest('[data-ai-popup]') && !target.closest('[data-ai-trigger]')) {
+        setShowAiPopup(false)
       }
     }
     
     document.addEventListener('mousedown', handleDocumentClick)
     return () => document.removeEventListener('mousedown', handleDocumentClick)
-  }, [showFormatPopup])
+  }, [showFormatPopup, showAiPopup])
 
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault()
@@ -413,6 +425,83 @@ function App() {
 
   const handleKeyUp = () => {
     setTimeout(handleTextSelection, 50)
+  }
+
+  // AI helper functions
+  const handleAiOperation = async (operation: 'improve' | 'expand' | 'summarize' | 'todos' | 'brainstorm', text?: string) => {
+    const textToProcess = text || selectedText || note
+    if (!textToProcess.trim()) {
+      setAiError('No text to process')
+      return
+    }
+
+    setAiLoading(true)
+    setAiError('')
+    
+    try {
+      let response: ClaudeResponse
+      
+      switch (operation) {
+        case 'improve':
+          response = await improveText(textToProcess)
+          break
+        case 'expand':
+          response = await expandText(textToProcess)
+          break
+        case 'summarize':
+          response = await summarizeText(textToProcess)
+          break
+        case 'todos':
+          response = await generateTodos(textToProcess)
+          break
+        case 'brainstorm':
+          response = await brainstormIdeas(textToProcess)
+          break
+        default:
+          response = { success: false, content: '', error: 'Unknown operation' }
+      }
+
+      if (response.success) {
+        if (operation === 'todos') {
+          // Parse todos and add them to the list
+          const newTodos = response.content.split('\n')
+            .map(line => line.trim())
+            .filter(line => line.length > 0)
+            .map(text => ({ text, done: false }))
+          
+          setTodos(t => [...t, ...newTodos])
+        } else {
+          // Replace text in note editor
+          const noteDiv = document.getElementById('note-editor')
+          if (noteDiv) {
+            if (selectedText && window.getSelection()) {
+              // Replace selected text
+              const selection = window.getSelection()
+              if (selection && selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0)
+                range.deleteContents()
+                range.insertNode(document.createTextNode(response.content))
+                selection.removeAllRanges()
+              }
+            } else {
+              // Replace entire content
+              noteDiv.innerHTML = response.content
+            }
+            setNote(noteDiv.innerHTML)
+            const isEmpty = !noteDiv.innerHTML || noteDiv.innerHTML.trim() === ''
+            noteDiv.classList.toggle('empty', isEmpty)
+          }
+        }
+        setShowAiPopup(false)
+        setShowFormatPopup(false)
+      } else {
+        setAiError(response.error || 'AI operation failed')
+      }
+    } catch (error) {
+      setAiError(error instanceof Error ? error.message : 'Unknown error')
+    } finally {
+      setAiLoading(false)
+    }
   }
 
 
@@ -653,6 +742,23 @@ function App() {
                   Clear
                 </button>
                 <button
+                  onClick={() => setShowAiPopup(!showAiPopup)}
+                  style={{
+                    border: 'none',
+                    background: 'none',
+                    color: 'inherit',
+                    fontSize: 20,
+                    cursor: 'pointer',
+                    marginRight: 8,
+                    opacity: aiLoading ? 0.5 : 1,
+                  }}
+                  disabled={aiLoading}
+                  aria-label="AI Tools"
+                  data-ai-trigger
+                >
+                  🤖
+                </button>
+                <button
                   onClick={toggleTheme}
                   style={{
                     border: 'none',
@@ -684,6 +790,148 @@ function App() {
             )}
           </div>
         </div>
+
+        {/* AI Popup */}
+        {showAiPopup && (
+          <div
+            data-ai-popup
+            style={{
+              position: 'fixed',
+              top: '80px',
+              right: '20px',
+              background: dark ? '#1a1a1a' : '#fff',
+              border: '1px solid #ccc',
+              borderRadius: '12px',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+              padding: '16px',
+              minWidth: '280px',
+              zIndex: 1000,
+              fontSize: '14px',
+            }}
+          >
+            <div style={{ marginBottom: '12px', fontSize: '16px', fontWeight: 'bold' }}>
+              🤖 AI Tools
+            </div>
+            
+            {aiError && (
+              <div style={{ 
+                color: '#e74c3c', 
+                fontSize: '12px', 
+                marginBottom: '12px',
+                padding: '8px',
+                background: 'rgba(231, 76, 60, 0.1)',
+                borderRadius: '6px'
+              }}>
+                {aiError}
+              </div>
+            )}
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ fontSize: '13px', color: '#666', marginBottom: '4px' }}>
+                {selectedText ? 'Selected text:' : 'Entire note:'}
+              </div>
+              
+              <button
+                onClick={() => handleAiOperation('improve')}
+                disabled={aiLoading}
+                style={{
+                  padding: '8px 12px',
+                  border: '1px solid #ccc',
+                  borderRadius: '6px',
+                  background: dark ? '#2a2a2a' : '#f8f9fa',
+                  color: 'inherit',
+                  cursor: aiLoading ? 'not-allowed' : 'pointer',
+                  fontSize: '14px',
+                  opacity: aiLoading ? 0.5 : 1,
+                }}
+              >
+                ✨ Improve Text
+              </button>
+              
+              <button
+                onClick={() => handleAiOperation('expand')}
+                disabled={aiLoading}
+                style={{
+                  padding: '8px 12px',
+                  border: '1px solid #ccc',
+                  borderRadius: '6px',
+                  background: dark ? '#2a2a2a' : '#f8f9fa',
+                  color: 'inherit',
+                  cursor: aiLoading ? 'not-allowed' : 'pointer',
+                  fontSize: '14px',
+                  opacity: aiLoading ? 0.5 : 1,
+                }}
+              >
+                📝 Expand Text
+              </button>
+              
+              <button
+                onClick={() => handleAiOperation('summarize')}
+                disabled={aiLoading}
+                style={{
+                  padding: '8px 12px',
+                  border: '1px solid #ccc',
+                  borderRadius: '6px',
+                  background: dark ? '#2a2a2a' : '#f8f9fa',
+                  color: 'inherit',
+                  cursor: aiLoading ? 'not-allowed' : 'pointer',
+                  fontSize: '14px',
+                  opacity: aiLoading ? 0.5 : 1,
+                }}
+              >
+                📋 Summarize
+              </button>
+              
+              <div style={{ height: '1px', background: '#ddd', margin: '8px 0' }} />
+              
+              <button
+                onClick={() => handleAiOperation('todos')}
+                disabled={aiLoading}
+                style={{
+                  padding: '8px 12px',
+                  border: '1px solid #ccc',
+                  borderRadius: '6px',
+                  background: dark ? '#2a2a2a' : '#f8f9fa',
+                  color: 'inherit',
+                  cursor: aiLoading ? 'not-allowed' : 'pointer',
+                  fontSize: '14px',
+                  opacity: aiLoading ? 0.5 : 1,
+                }}
+              >
+                ✅ Generate Todos
+              </button>
+              
+              <button
+                onClick={() => handleAiOperation('brainstorm')}
+                disabled={aiLoading}
+                style={{
+                  padding: '8px 12px',
+                  border: '1px solid #ccc',
+                  borderRadius: '6px',
+                  background: dark ? '#2a2a2a' : '#f8f9fa',
+                  color: 'inherit',
+                  cursor: aiLoading ? 'not-allowed' : 'pointer',
+                  fontSize: '14px',
+                  opacity: aiLoading ? 0.5 : 1,
+                }}
+              >
+                💡 Brainstorm Ideas
+              </button>
+            </div>
+            
+            {aiLoading && (
+              <div style={{ 
+                marginTop: '12px', 
+                textAlign: 'center', 
+                color: '#666',
+                fontSize: '12px'
+              }}>
+                🤖 Working...
+              </div>
+            )}
+          </div>
+        )}
+
       {infoOpen && (
         <div style={{position:'fixed',top:0,right:0,width:'320px',maxWidth:'90vw',height:'100vh',background:'var(--bg)',color:'var(--fg)',boxShadow:'-2px 0 16px 0 rgba(0,0,0,0.10)',zIndex:1000,display:'flex',flexDirection:'column',padding:'2rem 1.5rem 1.5rem 1.5rem',transition:'transform 0.2s',fontSize:'1.08em'}}>
           <button onClick={()=>setInfoOpen(false)} style={{position:'absolute',top:12,right:16,border:'none',background:'none',fontSize:22,cursor:'pointer',color:'inherit'}} aria-label="Close info">✕</button>
@@ -976,6 +1224,43 @@ function App() {
                   title="Clear Formatting"
                 >
                   ✕
+                </button>
+                <div style={{ width: '1px', height: '24px', background: '#ccc', margin: '0 4px' }} />
+                <button
+                  type="button"
+                  onClick={() => handleAiOperation('improve')}
+                  disabled={aiLoading}
+                  style={{
+                    padding: '4px 8px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    background: dark ? '#2a2a2a' : '#f8f9fa',
+                    color: 'inherit',
+                    cursor: aiLoading ? 'not-allowed' : 'pointer',
+                    fontSize: '12px',
+                    opacity: aiLoading ? 0.5 : 1,
+                  }}
+                  title="Improve with AI"
+                >
+                  ✨
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleAiOperation('expand')}
+                  disabled={aiLoading}
+                  style={{
+                    padding: '4px 8px',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px',
+                    background: dark ? '#2a2a2a' : '#f8f9fa',
+                    color: 'inherit',
+                    cursor: aiLoading ? 'not-allowed' : 'pointer',
+                    fontSize: '12px',
+                    opacity: aiLoading ? 0.5 : 1,
+                  }}
+                  title="Expand with AI"
+                >
+                  📝
                 </button>
               </div>
             )}
