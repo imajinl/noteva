@@ -7,7 +7,7 @@ minimalistic notetaker and to-do app with rich text formatting and AI-powered fe
 - **rich text formatting** — bold, underline, strikethrough, headings, and lists
 - **smart auto-detection** — type '1. ' for numbered lists or '- ' for bullet lists
 - **popup formatting toolbar** — select text to show formatting options
-- **🤖 AI-powered features** — Claude integration for text improvement, expansion, summarization, and smart to-do generation
+- **AI-powered features** — Claude integration for text improvement, expansion, summarization, and smart to-do generation
 - **customizable layout** — hide / show Entry, List, or Notes boxes individually
 - **light / dark mode toggle** with theme-aware styling
 - **30+ font options** for personalized typography
@@ -28,7 +28,7 @@ minimalistic notetaker and to-do app with rich text formatting and AI-powered fe
 - **export data:** click 'Export' to download your data as PDF
 - **format text:** select text in notes to show formatting popup with bold, underline, headings, and lists
 - **create lists:** type '1. ' for numbered lists or '- ' for bullet lists
-- **🤖 AI features:** click the robot icon for AI-powered text improvement, expansion, summarization, and to-do generation
+- **AI features:** click the robot icon for AI-powered text improvement, expansion, summarization, and to-do generation
 - **AI on selected text:** select any text and use ✨ and 📝 buttons for quick AI operations
 - **get help:** click the 'ℹ️' button for detailed instructions
 
