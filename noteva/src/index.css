@@ -405,3 +405,40 @@ button:focus-visible {
     padding-right: 1rem;
   }
 }
+
+/* Custom scrollbar for info section that adapts to theme */
+.info-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.info-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.info-list::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.info-list::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode scrollbar */
+[data-theme='dark'] .info-list::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme='dark'] .info-list::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Firefox scrollbar */
+.info-list {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+[data-theme='dark'] .info-list {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}

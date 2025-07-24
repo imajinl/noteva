@@ -561,7 +561,7 @@ function App() {
       </div>
       <div className="notetaker-container" style={{fontFamily: effectiveFont}}>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginBottom: '1.2rem' }}>
-        <div
+          <div
                       style={{ 
               position: 'fixed',
               top: '20px',
@@ -599,39 +599,39 @@ function App() {
                   position: 'absolute',
                   top: 0,
                   right: 0,
-            display: 'flex',
-            alignItems: 'center',
-            background: dark ? 'var(--bg)' : '#fff',
-            border: dark ? '1px solid #333' : '1px solid #ddd',
-            borderRadius: 8,
-            boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)',
-            padding: '0.3em 1.1em',
-            minHeight: 40,
+                  display: 'flex',
+                  alignItems: 'center',
+                  background: dark ? 'var(--bg)' : '#fff',
+                  border: dark ? '1px solid #333' : '1px solid #ddd',
+                  borderRadius: 8,
+                  boxShadow: '0 2px 8px 0 rgba(0,0,0,0.04)',
+                  padding: '0.3em 1.1em',
+                  minHeight: 40,
                   zIndex: 101,
-          }}
-        >
-          <select
-            value={font}
-            onChange={e => setFont(e.target.value)}
-            style={{
-              fontSize: '1em',
-              padding: '0.2em 0.5em',
-              borderRadius: 6,
-              border: dark ? '1px solid #333' : '1px solid #ccc',
-              background: dark ? 'var(--bg)' : '#fff',
-              color: 'inherit',
-              marginRight: 8,
+                }}
+              >
+                <select
+                  value={font}
+                  onChange={e => setFont(e.target.value)}
+                  style={{
+                    fontSize: '1em',
+                    padding: '0.2em 0.5em',
+                    borderRadius: 6,
+                    border: dark ? '1px solid #333' : '1px solid #ccc',
+                    background: dark ? 'var(--bg)' : '#fff',
+                    color: 'inherit',
+                    marginRight: 8,
                     height: '32px',
                     boxSizing: 'border-box',
-            }}
-            aria-label="Choose font"
-          >
-            {FONT_OPTIONS.map(opt => (
-              <option value={opt.value} key={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+                  }}
+                  aria-label="Choose font"
+                >
+                  {FONT_OPTIONS.map(opt => (
+                    <option value={opt.value} key={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -708,26 +708,26 @@ function App() {
                     Notes
                   </button>
                 </div>
-          <button
-            onClick={exportData}
-            style={{
+                <button
+                  onClick={exportData}
+                  style={{
                     fontSize: '0.85em',
-                  padding: '0.2em 0.5em',
-              borderRadius: 6,
-              border: dark ? '1px solid #333' : '1px solid #ccc',
-                  background: dark ? 'var(--bg)' : '#fff',
-              color: 'inherit',
-              cursor: 'pointer',
-              marginRight: 8,
+                    padding: '0.2em 0.5em',
+                    borderRadius: 6,
+                    border: dark ? '1px solid #333' : '1px solid #ccc',
+                    background: dark ? 'var(--bg)' : '#fff',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    marginRight: 8,
                     minWidth: '70px',
                     height: '32px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-            }}
-          >
-            Export
-          </button>
+                  }}
+                >
+                  Export
+                </button>
                 <button
                   onClick={clearAll}
                   style={{
@@ -943,7 +943,13 @@ function App() {
         <div style={{position:'fixed',top:0,right:0,width:'320px',maxWidth:'90vw',height:'100vh',background:'var(--bg)',color:'var(--fg)',boxShadow:'-2px 0 16px 0 rgba(0,0,0,0.10)',zIndex:1000,display:'flex',flexDirection:'column',padding:'2rem 1.5rem 1.5rem 1.5rem',transition:'transform 0.2s',fontSize:'1.08em'}}>
           <button onClick={()=>setInfoOpen(false)} style={{position:'absolute',top:12,right:16,border:'none',background:'none',fontSize:22,cursor:'pointer',color:'inherit'}} aria-label="Close info">✕</button>
           <h2 style={{marginTop:0,marginBottom:'1.2em',fontSize:'1.3em'}}>Info</h2>
-          <ul style={{paddingLeft:18,marginBottom:'auto',textAlign:'left'}}>
+          <ul className="info-list" style={{
+            paddingLeft:18,
+            marginBottom:'1.5rem',
+            textAlign:'left',
+            overflowY:'auto',
+            flex:'1'
+          }}>
             <li>Press 'Enter' to add a to-do.</li>
             <li>Your notes and to-dos are saved in your browser (local storage).</li>
             <li>You can export your notes and to-dos as PDF.</li>
@@ -965,31 +971,31 @@ function App() {
       )}
         <h1 className="noteva-heading">noteva <span role="img" aria-label="butterfly">🦋</span></h1>
         {showTodoEntry && (
-        <form onSubmit={addTodo} style={{width: '100%', maxWidth: 700, margin: '0 auto 0.2rem auto'}}>
-          <input
-            className="todo-input"
-            value={todoInput}
-            onChange={e => setTodoInput(e.target.value)}
-            placeholder="Add a to-do..."
-            style={{width: '100%'}}
-          />
-        </form>
+          <form onSubmit={addTodo} style={{width: '100%', maxWidth: 700, margin: '0 auto 0.2rem auto'}}>
+            <input
+              className="todo-input"
+              value={todoInput}
+              onChange={e => setTodoInput(e.target.value)}
+              placeholder="Add a to-do..."
+              style={{width: '100%'}}
+            />
+          </form>
         )}
         {showTodoList && (
-        <ul className="todo-list">
-          {todos.map((todo, i) => (
-            <li className="todo-item" key={i}>
-              <input
-                type="checkbox"
-                className="todo-checkbox"
-                checked={todo.done}
-                onChange={() => toggleTodo(i)}
-              />
+          <ul className="todo-list">
+            {todos.map((todo, i) => (
+              <li className="todo-item" key={i}>
+                <input
+                  type="checkbox"
+                  className="todo-checkbox"
+                  checked={todo.done}
+                  onChange={() => toggleTodo(i)}
+                />
                 <span className={`todo-text ${todo.done ? 'completed' : ''}`}>{todo.text}</span>
-              <button className="todo-delete-btn" onClick={() => deleteTodo(i)} title="Delete to-do" aria-label="Delete to-do">✕</button>
-            </li>
-          ))}
-        </ul>
+                <button className="todo-delete-btn" onClick={() => deleteTodo(i)} title="Delete to-do" aria-label="Delete to-do">✕</button>
+              </li>
+            ))}
+          </ul>
         )}
         {showNoteBox && (
           <div style={{ width: '100%', maxWidth: 700, margin: '0 auto', position: 'relative' }}>
